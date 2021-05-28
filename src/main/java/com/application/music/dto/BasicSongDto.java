@@ -3,6 +3,7 @@ package com.application.music.dto;
 public class BasicSongDto {
     String songName;
 
+
     public String getSongName() {
         return songName;
     }
