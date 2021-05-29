@@ -9,34 +9,25 @@ import java.io.File;
 
 public class JavafxSong implements Song
 {
-    private String name;
-    private String mediaFile;
-    private String album;
-    private String artist;
-    private int id;
-    private int length;
+    private String songName;
     private Media media;
     private MediaPlayer mp;
 
+    public JavafxSong(String path){
+        File songFile = new File(path);
+        media = new Media(songFile.toURI().toString());
+        mp = new MediaPlayer(media);
+        System.out.println(mp.getStatus());
+        setSongName(songFile.getName().substring(0,songFile.getName().length()-4));
+    }
 
-    @Override
-    public String getName() {
-        return null;
+    private void setSongName(String songName) {
+        this.songName = songName;
     }
 
     @Override
-    public String getArtist() {
-        return null;
-    }
-
-    @Override
-    public String getAlbum() {
-        return null;
-    }
-
-    @Override
-    public int getLength() {
-        return 0;
+    public String getSongName() {
+        return songName;
     }
 
     @Override
@@ -52,59 +43,5 @@ public class JavafxSong implements Song
     @Override
     public void pause() {
         mp.pause();
-
     }
-
-    @Override
-    public void skipAhead() {
-
-    }
-
-    @Override
-    public void skipBack() {
-
-    }
-
-    public void setMediaFile(String mediaFile, String function) {
-        this.mediaFile = mediaFile;
-        media = new Media(new File(mediaFile).toURI().toString());
-        mp = new MediaPlayer(media);
-        System.out.println(mp.getStatus());
-
-        if ( function.equals("Play") )
-        {
-            this.play() ;
-        }
-        else if ( function.equals("Pause") )
-        {
-            this.pause() ;
-
-        }
-        else if ( function.equals("Stop") )
-        {
-            this.stop() ;
-        }
-
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setAlbum(String album) {
-        this.album = album;
-    }
-
-    public void setArtist(String artist) {
-        this.artist = artist;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setLength(int length) {
-        this.length = length;
-    }
-
 }

@@ -1,88 +1,95 @@
 package com.application.music.model.impl;
 
 import com.application.music.model.Playlist;
-import com.application.music.model.Song;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.Stage;
 
-import java.awt.Desktop;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import static com.application.music.utility.ApplicationConstant.DEFAULT_PLAYLIST_LOCATION;
+import static com.application.music.utility.ApplicationConstant.*;
 
 public class GlobalPlaylist implements Playlist {
-    private String name;
-    private String location = DEFAULT_PLAYLIST_LOCATION;
-    private ArrayList<String> list;
-    private int repeat;
-    private boolean shuffle;
-    private JavafxSong song;
 
 
-    @Override
-    public void functionCalled(String function) {
+    private String playlistName;
+    private String location;
+    private ArrayList<String> songList;
+    private int currentSongId;
 
+    public GlobalPlaylist() {
+        location = DEFAULT_PLAYLIST_LOCATION;
+        playlistName = DEFAULT_PLAYLIST_NAME;
+        currentSongId = 0;
+        createSongList();
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    private int getCurrentSongId() {
+        return currentSongId;
+    }
+
+    public void setSongList(List<String> songList) {
+        this.songList = new ArrayList<>(songList);
+        setCurrentSongId(0);
+    }
+
+    private void setCurrentSongId(int currentSongId) {
+        this.currentSongId = currentSongId;
+    }
+
+    public void createSongList() {
         File directory = new File(location);
+        setSongList(Arrays.stream(directory.list()).filter(str -> str.endsWith(".mp3")).collect(Collectors.toList()));
 
-        File[] fileList = directory.listFiles( new FilenameFilter() {
-
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.endsWith(".mp3");
-            }
-        });
-
-//        song = new JavafxSong();
-        for (int i=0; i< fileList.length; i++)
-        {
-            song = new JavafxSong();
-            song.setMediaFile(fileList[i].getAbsolutePath(), function);
-            System.out.println(" # "+fileList[i].getName()) ;
-        }
-
-//        song.setMediaFile(fileList[0].getAbsolutePath(), function);
-//        System.out.println(" # "+fileList[0].getName()) ;
-
-
-    }
-
-
-    @Override
-    public void createList() {
-
+        //        File[] fileList = directory.listFiles( new FilenameFilter() {
+//            @Override
+//            public boolean accept(File dir, String name) {
+//                return name.endsWith(".mp3");
+//            }
+//        });
     }
 
     @Override
-    public void setName() {
-
+    public void setPlaylistName(String name) {
+        playlistName = name;
     }
 
     @Override
-    public void viewList() {
-
+    public String getPlaylistName() {
+        return playlistName;
     }
 
     @Override
-    public void addSong() {
-
+    public List<String> getSongList() {
+        return songList;
     }
 
     @Override
-    public void removeSong() {
-
+    public void setLocation(String absolutePath) {
+        location = absolutePath;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    @Override
+    public String getCurrentSongPath() {
+        if(songList!=null && songList.size()!=0)
+            return getLocation() + "//" +songList.get(getCurrentSongId());
+        else
+            throw new RuntimeException("No song found");
     }
 
-    public void setRepeat(int repeat) {
-        this.repeat = repeat;
+    @Override
+    public void nextSong() {
+        setCurrentSongId((getCurrentSongId()+1)%songList.size());
     }
 
-    public void setShuffle(boolean shuffle) {
-        this.shuffle = shuffle;
+    @Override
+    public void prevSong() {
+        setCurrentSongId((getCurrentSongId()-1)%songList.size());
     }
+
 }

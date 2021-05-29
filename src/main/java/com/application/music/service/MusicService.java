@@ -1,74 +1,82 @@
 package com.application.music.service;
 
+import com.application.music.model.Playlist;
+import com.application.music.model.Song;
 import com.application.music.model.impl.GlobalPlaylist;
-import com.mpatric.mp3agic.Mp3File;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.Stage;
+import com.application.music.model.impl.JavafxSong;
 
 import java.io.File;
+import java.util.List;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 public class MusicService {
-    //wrong way to create object - read about constructor
-    private GlobalPlaylist plist = new GlobalPlaylist();
-//    private Media media = null;
-//    private MediaPlayer mp = null;
+
+    private Playlist plist;
+    private Song currentSong;
+
+    Logger logger = Logger.getLogger(MusicService.class.getName());
+
+    public MusicService(){
+        logger.info( "Creating Music Service");
+        plist = new GlobalPlaylist();
+        currentSong = new JavafxSong(plist.getCurrentSongPath());
+        logger.info( "Music Service created with default playlist and song");
+    }
 
     public String openDirectory(File file){
+        logger.info( "Opening Directory : " + file.getAbsolutePath());
         plist.setLocation(file.getAbsolutePath());
+        plist.createSongList();
         return file.getAbsolutePath()==null?"Cant Open":file.getAbsolutePath();
     }
 
 
-    public void callPlaylist(String function) {
 
-        plist.functionCalled(function);
+    public List<String> getPlaylistSong() {
+        return plist.getSongList();
+    }
 
-/*        String testSong = "E:\\Music\\test.mp3";
-        try{
-            Mp3File mp3file = new Mp3File(testSong);
-            System.out.println("Length of this mp3 is: " + mp3file.getLengthInSeconds() + " seconds");
-            System.out.println("Bitrate: " + mp3file.getBitrate() + " kbps " + (mp3file.isVbr() ? "(VBR)" : "(CBR)"));
-            System.out.println("Sample rate: " + mp3file.getSampleRate() + " Hz");
-            System.out.println("Has ID3v1 tag?: " + (mp3file.hasId3v1Tag() ? "YES" : "NO"));
-            System.out.println("Has ID3v2 tag?: " + (mp3file.hasId3v2Tag() ? "YES" : "NO"));
-            System.out.println("Has custom tag?: " + (mp3file.hasCustomTag() ? "YES" : "NO"));
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-*/
+    public String getPlaylistName() {
+        return plist.getPlaylistName();
+    }
 
-/*        System.out.println(value);
-        if(null == media){
-            media = new Media(new File(testSong).toURI().toString());
-            System.out.println(media.getMetadata());
-            mp = new MediaPlayer(media);
-            System.out.println(mp.getStatus());
-            mp.play();
-        }
-        if(mp!=null){
-            if("Play".equals(value))
-            {
-                mp.play();
-                System.out.println("Play clicked");
-            }
-            else if ("Pause".equals(value))
-            {
-                mp.pause();
-                System.out.println("Pause clicked");
-            }
-            else if("Stop".equals(value))
-            {
-                mp.stop();
-                System.out.println("Stop clicked");
-            }
-        }
-        else
-        {
-            throw new RuntimeException("Unable to load Media and Mediaplayer classes");
-        }
- */
+    public String getSongName() {
+        return currentSong.getSongName();
+    }
 
+    public void playCurrentSong() {
+        logger.info( "play called");
+        currentSong.play();
+    }
+
+    public void pauseCurrentSong() {
+        logger.info( "pause called");
+        currentSong.pause();
+    }
+
+    public void stopCurrentSong() {
+        logger.info( "stop called");
+        currentSong.stop();
+    }
+
+    public void playNextSong() {
+        logger.info( "playNextSong called");
+        currentSong.stop();
+        plist.nextSong();
+        currentSong = new JavafxSong(plist.getCurrentSongPath());
+        logger.info( "Next Song : " + currentSong.getSongName());
+        currentSong.play();
+    }
+
+    public void playPrevSong() {
+        logger.info( "playPrevSong called");
+        currentSong.stop();
+        plist.prevSong();
+        currentSong = new JavafxSong(plist.getCurrentSongPath());
+        logger.info( "Previous Song : " + currentSong.getSongName());
+        currentSong.play();
     }
 }
