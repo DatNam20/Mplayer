@@ -14,6 +14,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.util.stream.Collectors;
 
 import static com.application.music.utility.ApplicationConstant.*;
 
@@ -101,7 +102,7 @@ public class Controller {
 
     private void refreshPlaylist(PlaylistDto playlistDto) {
         playlistLabel.setText(playlistDto.getPlaylistName());
-        ObservableList<String> items = FXCollections.observableArrayList(playlistDto.getPlaylistSong());
+        ObservableList<String> items = FXCollections.observableArrayList(playlistDto.getPlaylistSong().stream().map(str -> str.substring((str.lastIndexOf(FILE_NAME_SEPARATOR)+2),(str.length()-4))).collect(Collectors.toList()));
         playlistView.setItems(items);
     }
 }

@@ -29,8 +29,7 @@ public class MusicService {
 
     public String openDirectory(File file){
         logger.info( "Opening Directory : " + file.getAbsolutePath());
-        plist.setLocation(file.getAbsolutePath());
-        plist.createSongList();
+        plist.loadSong(file.getAbsolutePath());
         return file.getAbsolutePath()==null?"Cant Open":file.getAbsolutePath();
     }
 
