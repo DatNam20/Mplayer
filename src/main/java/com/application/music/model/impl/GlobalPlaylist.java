@@ -14,20 +14,16 @@ public class GlobalPlaylist implements Playlist {
 
 
     private String playlistName;
-    private String location;
     private ArrayList<String> songList;
     private int currentSongId;
 
     public GlobalPlaylist() {
-        location = DEFAULT_PLAYLIST_LOCATION;
+        songList = new ArrayList<>();
         playlistName = DEFAULT_PLAYLIST_NAME;
         currentSongId = 0;
-        createSongList();
+        loadSong(DEFAULT_PLAYLIST_LOCATION);
     }
 
-    public String getLocation() {
-        return location;
-    }
 
     private int getCurrentSongId() {
         return currentSongId;
@@ -42,9 +38,10 @@ public class GlobalPlaylist implements Playlist {
         this.currentSongId = currentSongId;
     }
 
-    public void createSongList() {
+    public void createSongList(String location) {
         File directory = new File(location);
-        setSongList(Arrays.stream(directory.list()).filter(str -> str.endsWith(".mp3")).collect(Collectors.toList()));
+        setSongList(Arrays.stream(directory.list()).filter(str -> str.endsWith(".mp3")).map(str -> (location + "//" + str)).collect(Collectors.toList()));
+
 
         //        File[] fileList = directory.listFiles( new FilenameFilter() {
 //            @Override
@@ -54,7 +51,6 @@ public class GlobalPlaylist implements Playlist {
 //        });
     }
 
-    @Override
     public void setPlaylistName(String name) {
         playlistName = name;
     }
@@ -69,15 +65,11 @@ public class GlobalPlaylist implements Playlist {
         return songList;
     }
 
-    @Override
-    public void setLocation(String absolutePath) {
-        location = absolutePath;
-    }
 
     @Override
     public String getCurrentSongPath() {
         if(songList!=null && songList.size()!=0)
-            return getLocation() + "//" +songList.get(getCurrentSongId());
+            return songList.get(getCurrentSongId());
         else
             throw new RuntimeException("No song found");
     }
@@ -90,6 +82,13 @@ public class GlobalPlaylist implements Playlist {
     @Override
     public void prevSong() {
         setCurrentSongId((getCurrentSongId()-1)%songList.size());
+    }
+
+    @Override
+    public void loadSong(String directoryPath) {
+        File directory = new File(directoryPath);
+        ArrayList<String> list = new ArrayList<>(Arrays.stream(directory.list()).filter(str -> str.endsWith(".mp3")).map(str -> (directoryPath + "//" + str)).collect(Collectors.toList()));
+        songList.addAll(list);
     }
 
 }

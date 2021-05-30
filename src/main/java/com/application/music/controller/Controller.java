@@ -1,5 +1,6 @@
 package com.application.music.controller;
 
+import com.application.music.dto.PlaylistDto;
 import com.application.music.service.MusicService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,19 +9,21 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.application.music.utility.ApplicationConstant.*;
 
 public class Controller {
     @FXML
     private Button btn;
+
+    @FXML
+    private Button playpause;
 
     @FXML
     private Pane rootPaneId;
@@ -39,18 +42,18 @@ public class Controller {
 
     @FXML
     public void initialize(){
-        refreshPlaylist(mser.getPlaylistSong());
+        refreshPlaylist(mser.getPlaylistDto());
     }
 
     @FXML protected void playpause(ActionEvent event) {
         btn = (Button) event.getSource();
         songNameLabel.setText(mser.getSongName());
-        if(UI_PLAY.equals(btn.getText())){
+        if(UI_PLAY.equals(playpause.getText())){
             mser.playCurrentSong();
-            btn.setText(UI_PAUSE);
-        }else if (UI_PAUSE.equals(btn.getText())){
+            playpause.setText(UI_PAUSE);
+        }else if (UI_PAUSE.equals(playpause.getText())){
             mser.pauseCurrentSong();
-            btn.setText(UI_PLAY);
+            playpause.setText(UI_PLAY);
         }else
             throw new RuntimeException("UNKNOWN Selection at play / pause");
     }
@@ -62,14 +65,22 @@ public class Controller {
 
     @FXML protected void next(ActionEvent event) {
         btn = (Button) event.getSource();
-        mser.playNextSong();
+        mser.nextSong();
         songNameLabel.setText(mser.getSongName());
+        if(UI_PLAY.equals(playpause.getText())){
+            playpause.setText(UI_PAUSE);
+        }
+        mser.playCurrentSong();
     }
 
     @FXML protected void previous(ActionEvent event) {
         btn = (Button) event.getSource();
-        mser.playPrevSong();
+        mser.prevSong();
         songNameLabel.setText(mser.getSongName());
+        if(UI_PLAY.equals(playpause.getText())){
+            playpause.setText(UI_PAUSE);
+        }
+        mser.playCurrentSong();
     }
 
     @FXML protected void openFolder(ActionEvent event) {
@@ -79,7 +90,7 @@ public class Controller {
         File file = directoryChooser.showDialog(stage);
         if(file.exists()) {
             mser.openDirectory(file);
-            refreshPlaylist(mser.getPlaylistSong());
+            refreshPlaylist(mser.getPlaylistDto());
         }else{
             playlistLabel.setText("Cant Open this folder");
             throw new RuntimeException("Cant open folder" + file.getAbsolutePath());
@@ -89,9 +100,9 @@ public class Controller {
 
     }
 
-    private void refreshPlaylist(List<String> playlistSong) {
-        playlistLabel.setText(mser.getPlaylistName());
-        ObservableList<String> items = FXCollections.observableArrayList(playlistSong);
+    private void refreshPlaylist(PlaylistDto playlistDto) {
+        playlistLabel.setText(playlistDto.getPlaylistName());
+        ObservableList<String> items = FXCollections.observableArrayList(playlistDto.getPlaylistSong().stream().map(str -> str.substring((str.lastIndexOf(FILE_NAME_SEPARATOR)+2),(str.length()-4))).collect(Collectors.toList()));
         playlistView.setItems(items);
     }
 }

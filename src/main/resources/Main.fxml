@@ -11,7 +11,7 @@
          <children>
             <Button mnemonicParsing="false" text="PREV" onAction="#previous" />
             <Button mnemonicParsing="false" text="STOP" onAction="#stop"/>
-            <Button mnemonicParsing="false" onAction="#playpause" text="PLAY" />
+            <Button fx:id="playpause" mnemonicParsing="false" onAction="#playpause" text="PLAY" />
             <Button mnemonicParsing="false" text="NEXT" onAction="#next"/>
          </children>
          <padding>

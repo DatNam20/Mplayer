@@ -1,5 +1,6 @@
 package com.application.music.service;
 
+import com.application.music.dto.PlaylistDto;
 import com.application.music.model.Playlist;
 import com.application.music.model.Song;
 import com.application.music.model.impl.GlobalPlaylist;
@@ -28,19 +29,8 @@ public class MusicService {
 
     public String openDirectory(File file){
         logger.info( "Opening Directory : " + file.getAbsolutePath());
-        plist.setLocation(file.getAbsolutePath());
-        plist.createSongList();
+        plist.loadSong(file.getAbsolutePath());
         return file.getAbsolutePath()==null?"Cant Open":file.getAbsolutePath();
-    }
-
-
-
-    public List<String> getPlaylistSong() {
-        return plist.getSongList();
-    }
-
-    public String getPlaylistName() {
-        return plist.getPlaylistName();
     }
 
     public String getSongName() {
@@ -62,21 +52,26 @@ public class MusicService {
         currentSong.stop();
     }
 
-    public void playNextSong() {
+    public void nextSong() {
         logger.info( "playNextSong called");
         currentSong.stop();
         plist.nextSong();
         currentSong = new JavafxSong(plist.getCurrentSongPath());
         logger.info( "Next Song : " + currentSong.getSongName());
-        currentSong.play();
     }
 
-    public void playPrevSong() {
+    public void prevSong() {
         logger.info( "playPrevSong called");
         currentSong.stop();
         plist.prevSong();
         currentSong = new JavafxSong(plist.getCurrentSongPath());
         logger.info( "Previous Song : " + currentSong.getSongName());
-        currentSong.play();
+    }
+
+    public PlaylistDto getPlaylistDto() {
+        PlaylistDto playlistDto = new PlaylistDto();
+        playlistDto.setPlaylistName(plist.getPlaylistName());
+        playlistDto.setPlaylistSong(plist.getSongList());
+        return playlistDto;
     }
 }
