@@ -61,6 +61,7 @@ public class Controller {
     @FXML protected void stop(ActionEvent event) {
         btn = (Button) event.getSource();
         mser.stopCurrentSong();
+        playpause.setText(UI_PLAY);
     }
 
     @FXML protected void next(ActionEvent event) {

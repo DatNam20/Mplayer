@@ -5,6 +5,7 @@ import com.application.music.model.Playlist;
 import com.application.music.model.Song;
 import com.application.music.model.impl.GlobalPlaylist;
 import com.application.music.model.impl.JavafxSong;
+import com.application.music.observer.SongObserver;
 
 import java.io.File;
 import java.util.List;
@@ -12,8 +13,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static com.application.music.utility.ApplicationConstant.SONG_END;
 
-public class MusicService {
+
+public class MusicService implements SongObserver {
 
     private Playlist plist;
     private Song currentSong;
@@ -23,7 +26,7 @@ public class MusicService {
     public MusicService(){
         logger.info( "Creating Music Service");
         plist = new GlobalPlaylist();
-        currentSong = new JavafxSong(plist.getCurrentSongPath());
+        currentSong = new JavafxSong(plist.getCurrentSongPath(), this);
         logger.info( "Music Service created with default playlist and song");
     }
 
@@ -56,7 +59,7 @@ public class MusicService {
         logger.info( "playNextSong called");
         currentSong.stop();
         plist.nextSong();
-        currentSong = new JavafxSong(plist.getCurrentSongPath());
+        currentSong = new JavafxSong(plist.getCurrentSongPath(),this);
         logger.info( "Next Song : " + currentSong.getSongName());
     }
 
@@ -64,7 +67,7 @@ public class MusicService {
         logger.info( "playPrevSong called");
         currentSong.stop();
         plist.prevSong();
-        currentSong = new JavafxSong(plist.getCurrentSongPath());
+        currentSong = new JavafxSong(plist.getCurrentSongPath(),this);
         logger.info( "Previous Song : " + currentSong.getSongName());
     }
 
@@ -73,5 +76,13 @@ public class MusicService {
         playlistDto.setPlaylistName(plist.getPlaylistName());
         playlistDto.setPlaylistSong(plist.getSongList());
         return playlistDto;
+    }
+
+    @Override
+    public void updateSongStatus(String status) {
+        if(status.equals(SONG_END)){
+            this.nextSong();
+            this.playCurrentSong();
+        }
     }
 }
