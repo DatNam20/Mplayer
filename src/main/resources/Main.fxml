@@ -9,10 +9,15 @@
    <children>
       <HBox alignment="CENTER" layoutY="317.0" prefHeight="83.0" prefWidth="569.0" spacing="30.0" style="-fx-background-color: #393e46;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <Button mnemonicParsing="false" text="PREV" onAction="#previous" />
-            <Button mnemonicParsing="false" text="STOP" onAction="#stop"/>
+            <Button mnemonicParsing="false" onAction="#repeat" text="REPT@" />
+            <Button mnemonicParsing="false" onAction="#previous" text="PREV" />
+            <Button mnemonicParsing="false" onAction="#stop" text="STOP" />
             <Button fx:id="playpause" mnemonicParsing="false" onAction="#playpause" text="PLAY" />
-            <Button mnemonicParsing="false" text="NEXT" onAction="#next"/>
+            <Button mnemonicParsing="false" onAction="#next" text="NEXT" />
+            <Button mnemonicParsing="false" onAction="#shuffle" text="SHFL0" />
+
+            <Button mnemonicParsing="false" onAction="#skipAhead" text="skipA" />
+            <Button mnemonicParsing="false" onAction="#skipBack" text="skipB" />
          </children>
          <padding>
             <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
@@ -21,9 +26,21 @@
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <Label fx:id="songNameLabel" alignment="CENTER" contentDisplay="TOP" layoutX="13.0" layoutY="57.0" prefHeight="72.0" prefWidth="253.0" text="Song Name" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
+                  <Label fx:id="songNameLabel" contentDisplay="TOP" layoutX="13.0" layoutY="57.0" prefHeight="42.0" prefWidth="252.0" text="Song Name" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
                      <font>
                         <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Slider fx:id="slider" layoutX="10.0" layoutY="278.0" prefHeight="14.0" prefWidth="220.0"  />
+                  <Label fx:id="duration" layoutX="233.0" layoutY="277.0" prefHeight="18.0" prefWidth="35.0" text="00:00" />
+                  <Label fx:id="artistLabel" layoutX="15.0" layoutY="99.0" prefHeight="26.0" prefWidth="252.0" text="Artist" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="albumLabel" layoutX="15.0" layoutY="125.0" prefHeight="26.0" prefWidth="252.0" text="Album" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
+                     <font>
+                        <Font size="14.0" />
                      </font>
                   </Label>
                </children>

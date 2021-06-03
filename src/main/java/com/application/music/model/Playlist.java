@@ -12,4 +12,8 @@ public interface Playlist
     public void nextSong();
     public void prevSong();
     public void loadSong(String directoryPath);
+    public void setShuffle(boolean value);
+    public void setRepeat(int value);
+    public int getRepeat();
+    public boolean getShuffle();
 }

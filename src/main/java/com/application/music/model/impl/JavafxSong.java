@@ -2,15 +2,15 @@ package com.application.music.model.impl;
 
 import com.application.music.model.Song;
 import com.application.music.observer.SongObserver;
+import javafx.collections.MapChangeListener;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
-import static com.application.music.utility.ApplicationConstant.SONG_END;
+import static com.application.music.utility.ApplicationConstant.*;
 
 public class JavafxSong implements Song {
     private Logger logger = Logger.getLogger(JavafxSong.class.getName());
@@ -18,6 +18,10 @@ public class JavafxSong implements Song {
     private Media media;
     private MediaPlayer mp;
     private SongObserver serviceObserver;
+    private String album;
+    private String artist;
+    private Object image;
+
 
     public JavafxSong(String path, SongObserver observer){
         File songFile = new File(path);
@@ -26,7 +30,6 @@ public class JavafxSong implements Song {
         System.out.println(mp.getStatus());
         setSongName(songFile.getName().substring(0,songFile.getName().length()-4));
         serviceObserver = observer;
-
     }
 
     private void setSongName(String songName) {
@@ -52,9 +55,41 @@ public class JavafxSong implements Song {
             @Override
             public void run() {
                 mp.stop();
-                notifyObservers(SONG_END);
+                notifyObservers(SONG_END,null);
             }
         });
+        media.getMetadata().addListener(new MapChangeListener<String, Object>() {
+            @Override
+            public void onChanged(Change<? extends String, ? extends Object> ch) {
+                if (ch.wasAdded()) {
+                    handleMetadata(ch.getKey(), ch.getValueAdded());
+                }
+            }
+        });
+        mp.setOnReady(new Runnable() {
+            @Override
+            public void run() {
+                notifyObservers(SONG_READY, null);
+            }
+        });
+
+//        mp.currentTimeProperty()
+//                .addListener((ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue)
+//                        -> {
+//            notifyObservers(UPDATE_SLIDER, newValue.toSeconds());
+//        });
+    }
+
+    private void handleMetadata(String key, Object value) {
+        if (key.equals("album")) {
+            album = (value.toString());
+        } else if (key.contains("artist")) {
+            artist = (value.toString());
+        } if (key.equals("title")) {
+            songName = (value.toString());
+        }  if (key.equals("image")) {
+            image = value;
+        }
     }
 
     @Override
@@ -63,8 +98,43 @@ public class JavafxSong implements Song {
         logger.info(mp.getStatus().toString());
     }
 
+    @Override
+    public Double getDuration() {
+        return mp.getTotalDuration().toSeconds();
+    }
 
-    public void notifyObservers(String status) {
-        serviceObserver.updateSongStatus(status);
+    @Override
+    public String getAlbum() {
+        return null;
+    }
+
+
+    @Override
+    public String getArtist() {
+        return null;
+    }
+
+    @Override
+    public Object getImage() {
+        return null;
+    }
+
+    @Override
+    public double getCurrentTime() {
+        return mp.getCurrentTime().toSeconds();
+    }
+
+    @Override
+    public void seek(double currentTime) {
+        if(currentTime<=0)
+            currentTime = 0.0 ;
+        else if(null != getDuration() && currentTime>=getDuration())
+            currentTime = getDuration();
+        mp.seek(Duration.seconds(currentTime));
+    }
+
+
+    public void notifyObservers(String status,Object value) {
+        serviceObserver.updateSongStatus(status,value);
     }
 }

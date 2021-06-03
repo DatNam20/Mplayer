@@ -6,5 +6,17 @@ public class ApplicationConstant {
     public static final String UI_PLAY = "PLAY";
     public static final String UI_PAUSE = "PAUSE";
     public static final String FILE_NAME_SEPARATOR = "//";
+
     public static final String SONG_END = "SONG_END";
+    public static final String SONG_READY = "SONG_READY";
+
+    public static final String UPDATE_SLIDER = "UPDATE_SLIDER";
+    public static final Double SKIP_CONST = 5.0 ;
+
+    public static final int REPEAT_ALL = 0;
+    public static final int REPEAT_ONE = 1;
+    public static final int TOTAL_REPEAT_OPTIONS = 2;
+    public static final boolean SHUFFLE_ON = true;
+    public static final boolean SHUFFLE_OFF = false;
+
 }

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Random;
 
 import static com.application.music.utility.ApplicationConstant.*;
 
@@ -16,14 +17,33 @@ public class GlobalPlaylist implements Playlist {
     private String playlistName;
     private ArrayList<String> songList;
     private int currentSongId;
+    private int repeat;
+    private boolean shuffle;
 
     public GlobalPlaylist() {
         songList = new ArrayList<>();
         playlistName = DEFAULT_PLAYLIST_NAME;
         currentSongId = 0;
         loadSong(DEFAULT_PLAYLIST_LOCATION);
+        repeat = REPEAT_ALL;
+        shuffle = SHUFFLE_OFF;
     }
 
+    public void setRepeat(int repeat) {
+        this.repeat = repeat;
+    }
+
+    public void setShuffle(boolean shuffle) {
+        this.shuffle = shuffle;
+    }
+
+    public int getRepeat() {
+        return repeat;
+    }
+
+    public boolean getShuffle() {
+        return shuffle;
+    }
 
     private int getCurrentSongId() {
         return currentSongId;
@@ -76,12 +96,30 @@ public class GlobalPlaylist implements Playlist {
 
     @Override
     public void nextSong() {
-        setCurrentSongId((getCurrentSongId()+1)%songList.size());
+        if(SHUFFLE_OFF == getShuffle() && REPEAT_ALL == getRepeat()){
+            setCurrentSongId((getCurrentSongId()+1)%songList.size());
+        }else if(SHUFFLE_ON == getShuffle() && REPEAT_ALL == getRepeat()){
+            setCurrentSongId(((new Random()).nextInt(songList.size())%songList.size()));
+        }else if(SHUFFLE_OFF == getShuffle() && REPEAT_ONE == getRepeat()){
+            setCurrentSongId(getCurrentSongId());
+        }else if(SHUFFLE_ON == getShuffle() && REPEAT_ONE == getRepeat()){
+            setCurrentSongId(getCurrentSongId());
+        }
+
     }
 
     @Override
     public void prevSong() {
-        setCurrentSongId((getCurrentSongId()-1)%songList.size());
+        if(SHUFFLE_OFF == getShuffle() && REPEAT_ALL == getRepeat()){
+            setCurrentSongId( ( (getCurrentSongId()+ songList.size()-1) % songList.size() ) );
+        }else if(SHUFFLE_ON == getShuffle() && REPEAT_ALL == getRepeat()){
+            setCurrentSongId(((new Random()).nextInt(songList.size())%songList.size()));
+        }else if(SHUFFLE_OFF == getShuffle() && REPEAT_ONE == getRepeat()){
+            setCurrentSongId(getCurrentSongId());
+        }else if(SHUFFLE_ON == getShuffle() && REPEAT_ONE == getRepeat()){
+            setCurrentSongId(getCurrentSongId());
+        }
+
     }
 
     @Override

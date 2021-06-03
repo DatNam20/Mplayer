@@ -15,12 +15,13 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Main.fxml"));
 
-        Scene scene = new Scene(root, 500, 575);
+        Scene scene = new Scene(root, 575, 475);
 
         primaryStage.setTitle("MPlayer");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+
 
 
     public static void main(String[] args) {

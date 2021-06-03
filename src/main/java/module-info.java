@@ -6,6 +6,7 @@ module Mplayer {
     requires javafx.media;
     requires java.desktop;
     requires java.logging;
+    requires commons.lang3;
 
     opens com.application.music;
     opens com.application.music.controller;

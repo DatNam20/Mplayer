@@ -5,4 +5,12 @@ public interface Song {
     public void stop() ;
     public void play() ;
     public void pause() ;
+    public Double getDuration();
+    public String getAlbum();
+    public String getArtist();
+    public Object getImage();
+
+    double getCurrentTime();
+
+    void seek(double currentTime);
 }
