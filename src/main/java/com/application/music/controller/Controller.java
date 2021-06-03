@@ -14,6 +14,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
@@ -42,6 +44,9 @@ public class Controller{
 
     @FXML
     private Slider slider;
+
+    @FXML
+    private ImageView songImage;
 
     @FXML
     private Label playlistLabel, songNameLabel, duration, artistLabel, albumLabel;
@@ -85,6 +90,7 @@ public class Controller{
         slider.setMax(songDto.getSongDuration());
         artistLabel.setText(songDto.getArtist());
         albumLabel.setText(songDto.getAlbum());
+        songImage.setImage((Image) songDto.getImage());
         updateSlider();
     }
 

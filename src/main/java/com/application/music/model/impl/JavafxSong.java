@@ -105,18 +105,18 @@ public class JavafxSong implements Song {
 
     @Override
     public String getAlbum() {
-        return null;
+        return album;
     }
 
 
     @Override
     public String getArtist() {
-        return null;
+        return artist;
     }
 
     @Override
     public Object getImage() {
-        return null;
+        return image;
     }
 
     @Override
