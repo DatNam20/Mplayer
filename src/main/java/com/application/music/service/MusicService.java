@@ -39,7 +39,17 @@ public class MusicService implements SongObserver {
 
     public String openDirectory(File file){
         logger.info( "Opening Directory : " + file.getAbsolutePath());
+
+        File[] contentList = file.listFiles() ;
+        if (contentList != null && contentList.length > 0) {
+            for(int i=0; i< contentList.length; i++) {
+                if (contentList[i].isDirectory())
+                    openDirectory(contentList[i]);
+            }
+
+        }
         plist.loadSong(file.getAbsolutePath());
+
         return file.getAbsolutePath()==null?"Cant Open":file.getAbsolutePath();
     }
 
