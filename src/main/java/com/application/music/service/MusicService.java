@@ -8,6 +8,7 @@ import com.application.music.model.Song;
 import com.application.music.model.impl.GlobalPlaylist;
 import com.application.music.model.impl.JavafxSong;
 import com.application.music.observer.SongObserver;
+import com.application.music.utility.FileUtil;
 import org.apache.commons.lang3.StringUtils;
 
 
@@ -32,40 +33,23 @@ public class MusicService implements SongObserver {
     public MusicService(Controller controller){
         logger.info( "Creating Music Service");
         plist = new GlobalPlaylist();
-        currentSong = new JavafxSong(plist.getCurrentSongPath(), this);
+        if(null != plist.getCurrentSongPath())
+            currentSong = new JavafxSong(plist.getCurrentSongPath(), this);
         this.controller = controller;
         logger.info( "Music Service created with default playlist and song");
     }
 
-    public String openDirectory(File file){
-        logger.info( "Opening Directory : " + file.getAbsolutePath());
 
-        File[] contentList = file.listFiles() ;
-        if (contentList != null && contentList.length > 0) {
-            for(int i=0; i< contentList.length; i++) {
-                if (contentList[i].isDirectory())
-                    openDirectory(contentList[i]);
-            }
-
-        }
-        plist.loadSong(file.getAbsolutePath());
-
-        return file.getAbsolutePath()==null?"Cant Open":file.getAbsolutePath();
-    }
-
-
+/*********************** Song Controls *************************/
     public void playCurrentSong() {
-        logger.info( "play called");
         currentSong.play();
     }
 
     public void pauseCurrentSong() {
-        logger.info( "pause called");
         currentSong.pause();
     }
 
     public void stopCurrentSong() {
-        logger.info( "stop called");
         currentSong.stop();
     }
 
@@ -85,12 +69,7 @@ public class MusicService implements SongObserver {
         logger.info( "Previous Song : " + currentSong.getSongName());
     }
 
-    public PlaylistDto getPlaylistDto() {
-        PlaylistDto playlistDto = new PlaylistDto();
-        playlistDto.setPlaylistName(plist.getPlaylistName());
-        playlistDto.setPlaylistSong(plist.getSongList());
-        return playlistDto;
-    }
+    /*********************** Song updates ************************/
 
     @Override
     public void updateSongStatus(String status, Object value) {
@@ -102,14 +81,6 @@ public class MusicService implements SongObserver {
         }
     }
 
-    public int updateRepeat(){
-        plist.setRepeat((plist.getRepeat() + 1)%TOTAL_REPEAT_OPTIONS);
-        return plist.getRepeat();
-    }
-    public boolean updateShuffle(){
-        plist.setShuffle(!plist.getShuffle());
-        return plist.getShuffle();
-    }
 
     public BasicSongDto getSongDto() {
         BasicSongDto songDto = new BasicSongDto();
@@ -128,5 +99,80 @@ public class MusicService implements SongObserver {
     public void seek(Double time) {
         currentSong.seek(time) ;
     }
+
+
+/******************************* Playlist ******************************/
+
+    public PlaylistDto getPlaylistDto() {
+        PlaylistDto playlistDto = new PlaylistDto();
+        playlistDto.setPlaylistName(plist.getPlaylistName());
+        playlistDto.setPlaylistSong(plist.getSongList());
+        return playlistDto;
+    }
+
+    public int updateRepeat(){
+        plist.setRepeat((plist.getRepeat() + 1)%TOTAL_REPEAT_OPTIONS);
+        return plist.getRepeat();
+    }
+
+    /**
+     * This method toggles the shuffle option in the menu
+     * @return : boolean - the current shuffle status
+     */
+    public boolean updateShuffle(){
+        plist.setShuffle(!plist.getShuffle());
+        return plist.getShuffle();
+    }
+
+
+    public void createPlaylist(String playlistName){
+
+    }
+
+    public void deletePlaylist(Integer playlistId){
+
+    }
+
+    public void renamePlaylist(Integer playlistId){
+
+    }
+
+    public void addToPlaylist(List<Integer> songId, Integer playlistId){
+
+    }
+
+    public void removeFromPlaylist(List<Integer> songId, Integer playlistId){
+
+    }
+
+
+    public void addDirectory(File file){
+
+    }
+
+    public void removeDirectory(Integer pathId){
+
+    }
+
+    public void refreshAllSongs(){
+
+    }
+
+    public String openDirectory(File file){
+        logger.info( "Opening Directory : " + file.getAbsolutePath());
+
+        File[] contentList = file.listFiles() ;
+        if (contentList != null && contentList.length > 0) {
+            for(int i=0; i< contentList.length; i++) {
+                if (contentList[i].isDirectory())
+                    openDirectory(contentList[i]);
+            }
+
+        }
+        plist.addSongs(FileUtil.loadSong(file.getAbsolutePath()));
+
+        return file.getAbsolutePath()==null?"Cant Open":file.getAbsolutePath();
+    }
+
 
 }

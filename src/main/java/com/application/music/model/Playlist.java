@@ -11,7 +11,8 @@ public interface Playlist
     public String getCurrentSongPath();
     public void nextSong();
     public void prevSong();
-    public void loadSong(String directoryPath);
+    public void addSongs(List<String> songList);
+    public String removeSongs(List<String> songList);
     public void setShuffle(boolean value);
     public void setRepeat(int value);
     public int getRepeat();

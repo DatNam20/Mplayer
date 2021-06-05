@@ -31,8 +31,6 @@ import static com.application.music.utility.ApplicationConstant.*;
 public class Controller{
     Logger logger = Logger.getLogger(Controller.class.getName());
 
-    public static volatile boolean shutdown=false;
-
     @FXML
     private Button btn;
 
@@ -63,6 +61,7 @@ public class Controller{
     @FXML
     public void initialize(){
         refreshPlaylist(mser.getPlaylistDto());
+        updateSongDetails(mser.getSongDto());
         slider.setOnMouseClicked(mouseEvent -> {
             mser.seek(slider.getValue());
         });
@@ -84,6 +83,11 @@ public class Controller{
         updateSongDetails(mser.getSongDto());
     }
 
+    /**
+     *
+     * @param songDto :
+     *
+     */
     public void updateSongDetails(BasicSongDto songDto) {
         songNameLabel.setText(songDto.getSongName());
         duration.setText(TimeUtil.elapsedTime(songDto.getSongDuration().intValue()));
@@ -200,8 +204,48 @@ public class Controller{
 
     private void refreshPlaylist(PlaylistDto playlistDto) {
         playlistLabel.setText(playlistDto.getPlaylistName());
-        ObservableList<String> items = FXCollections.observableArrayList(playlistDto.getPlaylistSong().stream().map(str -> str.substring((str.lastIndexOf(FILE_NAME_SEPARATOR)+2),(str.length()-4))).collect(Collectors.toList()));
+        ObservableList<String> items = FXCollections.observableArrayList(
+                playlistDto.getPlaylistSong().stream()
+                        .map(str -> str.substring((str.lastIndexOf(FILE_NAME_SEPARATOR)+2),(str.length()-4)))
+                        .collect(Collectors.toList()));
         playlistView.setItems(items);
+    }
+
+    private void addPlaylist(){
+
+    }
+
+    private void renamePlaylist(){
+
+    }
+
+    private void removePlaylist(){
+
+    }
+
+    private void addToPlaylist(){
+
+    }
+
+    private void removeFromPlaylist(){
+
+    }
+
+    private void loadPlaylist(){
+
+    }
+
+
+    private void refreshSong(){
+
+    }
+
+    private void addFolder(){
+
+    }
+
+    private void removeFolder(){
+
     }
 
 

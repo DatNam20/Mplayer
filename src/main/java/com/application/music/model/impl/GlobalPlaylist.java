@@ -1,13 +1,11 @@
 package com.application.music.model.impl;
 
 import com.application.music.model.Playlist;
+import com.application.music.utility.FileUtil;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.Random;
 
 import static com.application.music.utility.ApplicationConstant.*;
 
@@ -16,15 +14,17 @@ public class GlobalPlaylist implements Playlist {
 
     private String playlistName;
     private ArrayList<String> songList;
+    private Set<String> songSet;
     private int currentSongId;
     private int repeat;
     private boolean shuffle;
 
     public GlobalPlaylist() {
         songList = new ArrayList<>();
+        songSet = new HashSet<>();
         playlistName = DEFAULT_PLAYLIST_NAME;
         currentSongId = 0;
-        loadSong(DEFAULT_PLAYLIST_LOCATION);
+        addSongs(FileUtil.loadSong(DEFAULT_PLAYLIST_LOCATION));
         repeat = REPEAT_ALL;
         shuffle = SHUFFLE_OFF;
     }
@@ -91,7 +91,8 @@ public class GlobalPlaylist implements Playlist {
         if(songList!=null && songList.size()!=0)
             return songList.get(getCurrentSongId());
         else
-            throw new RuntimeException("No song found");
+            return null;
+            //throw new RuntimeException("No song found");
     }
 
     @Override
@@ -123,10 +124,21 @@ public class GlobalPlaylist implements Playlist {
     }
 
     @Override
-    public void loadSong(String directoryPath) {
-        File directory = new File(directoryPath);
-        ArrayList<String> list = new ArrayList<>(Arrays.stream(directory.list()).filter(str -> str.endsWith(".mp3")).map(str -> (directoryPath + "//" + str)).collect(Collectors.toList()));
-        songList.addAll(list);
+    public void addSongs(List<String> list) {
+        for ( String str : list )
+        {
+            if ( !songSet.contains(str) ) {
+                songSet.add(str) ;
+                songList.add(str) ;
+            }
+
+        }
+
+    }
+
+    @Override
+    public String removeSongs(List<String> songList) {
+        return "Can't Delete Songs from Global Playlist";
     }
 
 }
