@@ -9,6 +9,7 @@ import com.application.music.model.impl.GlobalPlaylist;
 import com.application.music.model.impl.JavafxSong;
 import com.application.music.observer.SongObserver;
 import com.application.music.utility.FileUtil;
+import javafx.scene.image.Image;
 import org.apache.commons.lang3.StringUtils;
 
 
@@ -39,34 +40,66 @@ public class MusicService implements SongObserver {
         logger.info( "Music Service created with default playlist and song");
     }
 
+    private boolean checkSong( ) {
+        if ( currentSong == null ) {
+            if ( plist == null || plist.getSongList().size() == 0 )
+                return false ;
+            else {
+                currentSong = new JavafxSong(plist.getCurrentSongPath(), this);
+                return true;
+            }
+        }
+
+        return true ;
+    }
 
 /*********************** Song Controls *************************/
-    public void playCurrentSong() {
-        currentSong.play();
+    public boolean playCurrentSong() {
+        if (checkSong() == true ) {
+            currentSong.play();
+            return true;
+        }
+        return false ;
     }
 
-    public void pauseCurrentSong() {
-        currentSong.pause();
+    public boolean pauseCurrentSong() {
+        if (checkSong() == true ) {
+            currentSong.pause();
+            return true;
+        }
+        return false ;
     }
 
-    public void stopCurrentSong() {
-        currentSong.stop();
+/*    public boolean stopCurrentSong() {
+        if (checkSong() == true ) {
+            currentSong.stop();
+            return true;
+        }
+        return false ;
     }
-
-    public void nextSong() {
+*/
+    public boolean nextSong() {
         logger.info( "playNextSong called");
-        currentSong.stop();
-        plist.nextSong();
-        currentSong = new JavafxSong(plist.getCurrentSongPath(),this);
-        logger.info( "Next Song : " + currentSong.getSongName());
+        if (checkSong() == true ) {
+            currentSong.stop();
+            plist.nextSong();
+            currentSong = new JavafxSong(plist.getCurrentSongPath(),this);
+            logger.info( "Next Song : " + currentSong.getSongName());
+            return true;
+        }
+        return false ;
     }
 
-    public void prevSong() {
+    public boolean prevSong() {
         logger.info( "playPrevSong called");
-        currentSong.stop();
-        plist.prevSong();
-        currentSong = new JavafxSong(plist.getCurrentSongPath(),this);
-        logger.info( "Previous Song : " + currentSong.getSongName());
+        if (checkSong() == true ) {
+            currentSong.stop();
+            plist.prevSong();
+            currentSong = new JavafxSong(plist.getCurrentSongPath(),this);
+            logger.info( "Previous Song : " + currentSong.getSongName());
+            return true;
+        }
+        return false ;
     }
 
     /*********************** Song updates ************************/
@@ -84,20 +117,36 @@ public class MusicService implements SongObserver {
 
     public BasicSongDto getSongDto() {
         BasicSongDto songDto = new BasicSongDto();
-        songDto.setSongName(currentSong.getSongName());
-        songDto.setSongDuration(currentSong.getDuration());
-        songDto.setAlbum(StringUtils.defaultIfEmpty(currentSong.getAlbum(), "Album-NA"));
-        songDto.setArtist(StringUtils.defaultIfEmpty(currentSong.getArtist(), "Artist-NA"));
-        songDto.setImage(currentSong.getImage());
+        if (checkSong() == true ) {
+            songDto.setSongName(currentSong.getSongName());
+            songDto.setSongDuration(currentSong.getDuration());
+            songDto.setAlbum(StringUtils.defaultIfEmpty(currentSong.getAlbum(), "Album-NA"));
+            songDto.setArtist(StringUtils.defaultIfEmpty(currentSong.getArtist(), "Artist-NA"));
+            songDto.setImage((currentSong.getImage()==null)?new Image(getClass().getResource(IMAGE_FILE_PATH).toString()):currentSong.getImage());
+        }
+        else {
+            songDto.setSongName(" ");
+            songDto.setSongDuration(0.0);
+            songDto.setAlbum(" ");
+            songDto.setArtist(" ");
+            songDto.setImage(new Image(getClass().getResource(IMAGE_FILE_PATH).toString()));
+        }
         return songDto;
     }
 
     public double getElapsedTime() {
-        return (currentSong.getCurrentTime());
+        if (checkSong() == true ) {
+            return (currentSong.getCurrentTime());
+        }
+        return 0.0 ;
     }
 
-    public void seek(Double time) {
-        currentSong.seek(time) ;
+    public boolean seek(Double time) {
+        if (checkSong() == true ) {
+            currentSong.seek(time) ;
+            return true;
+        }
+        return false ;
     }
 
 

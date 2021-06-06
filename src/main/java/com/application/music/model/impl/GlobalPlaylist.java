@@ -24,7 +24,7 @@ public class GlobalPlaylist implements Playlist {
         songSet = new HashSet<>();
         playlistName = DEFAULT_PLAYLIST_NAME;
         currentSongId = 0;
-        addSongs(FileUtil.loadSong(DEFAULT_PLAYLIST_LOCATION));
+        //addSongs(FileUtil.loadSong(DEFAULT_PLAYLIST_LOCATION));
         repeat = REPEAT_ALL;
         shuffle = SHUFFLE_OFF;
     }

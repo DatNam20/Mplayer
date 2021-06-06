@@ -17,7 +17,6 @@
          <children>
             <Button mnemonicParsing="false" onAction="#repeat" text="REPT@" />
             <Button mnemonicParsing="false" onAction="#previous" text="PREV" />
-            <Button mnemonicParsing="false" onAction="#stop" text="STOP" />
             <Button fx:id="playpause" mnemonicParsing="false" onAction="#playpause" text="PLAY" />
             <Button mnemonicParsing="false" onAction="#next" text="NEXT" />
             <Button mnemonicParsing="false" onAction="#shuffle" text="SHFL0" />

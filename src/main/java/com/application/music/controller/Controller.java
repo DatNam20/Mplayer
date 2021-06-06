@@ -22,6 +22,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -59,7 +60,7 @@ public class Controller{
     }
 
     @FXML
-    public void initialize(){
+    public void initialize() throws IOException {
         refreshPlaylist(mser.getPlaylistDto());
         updateSongDetails(mser.getSongDto());
         slider.setOnMouseClicked(mouseEvent -> {
@@ -69,7 +70,7 @@ public class Controller{
 
 
 
-    @FXML protected void playpause(ActionEvent event) {
+    @FXML protected void playpause(ActionEvent event) throws IOException {
         btn = (Button) event.getSource();
 
         if(UI_PLAY.equals(playpause.getText())){
@@ -126,13 +127,13 @@ public class Controller{
         thread.start();
     }
 
-    @FXML protected void stop(ActionEvent event) {
+/*    @FXML protected void stop(ActionEvent event) {
         btn = (Button) event.getSource();
         mser.stopCurrentSong();
         playpause.setText(UI_PLAY);
     }
-
-    @FXML protected void next(ActionEvent event) {
+*/
+    @FXML protected void next(ActionEvent event) throws IOException {
         btn = (Button) event.getSource();
         mser.nextSong();
         if(UI_PLAY.equals(playpause.getText())){
@@ -147,19 +148,19 @@ public class Controller{
 //        updateSongDetails(mser.getSongDto());
 //    }
 
-    @FXML protected void skipAhead(ActionEvent event) {
+    @FXML protected void skipAhead(ActionEvent event) throws IOException {
         btn = (Button) event.getSource();
         mser.seek(mser.getElapsedTime()+SKIP_CONST);
         updateSongDetails(mser.getSongDto());
     }
 
-    @FXML protected void skipBack(ActionEvent event) {
+    @FXML protected void skipBack(ActionEvent event) throws IOException {
         btn = (Button) event.getSource();
         mser.seek(mser.getElapsedTime()-SKIP_CONST);
         updateSongDetails(mser.getSongDto());
     }
 
-    @FXML protected void previous(ActionEvent event) {
+    @FXML protected void previous(ActionEvent event) throws IOException {
         btn = (Button) event.getSource();
         mser.prevSong();
         if(UI_PLAY.equals(playpause.getText())){

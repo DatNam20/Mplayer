@@ -8,6 +8,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.logging.Logger;
 
 import static com.application.music.utility.ApplicationConstant.*;
@@ -55,7 +56,11 @@ public class JavafxSong implements Song {
             @Override
             public void run() {
                 mp.stop();
-                notifyObservers(SONG_END,null);
+                try {
+                    notifyObservers(SONG_END,null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
         media.getMetadata().addListener(new MapChangeListener<String, Object>() {
@@ -69,7 +74,11 @@ public class JavafxSong implements Song {
         mp.setOnReady(new Runnable() {
             @Override
             public void run() {
-                notifyObservers(SONG_READY, null);
+                try {
+                    notifyObservers(SONG_READY, null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -134,7 +143,7 @@ public class JavafxSong implements Song {
     }
 
 
-    public void notifyObservers(String status,Object value) {
+    public void notifyObservers(String status,Object value) throws IOException {
         serviceObserver.updateSongStatus(status,value);
     }
 }
