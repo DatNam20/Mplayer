@@ -8,6 +8,15 @@ public class BasicSongDto {
     String artist;
     String album;
     Object Image;
+    Double songElapsedTime;
+
+    public Double getSongElapsedTime() {
+        return songElapsedTime;
+    }
+
+    public void setSongElapsedTime(Double songElapsedTime) {
+        this.songElapsedTime = songElapsedTime;
+    }
 
     public void setArtist(String artist) {
         this.artist = artist;

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="675.0" prefWidth="945.0" style="-fx-background-color: #ffc996;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Final">
+   <children>
+      <VBox prefHeight="570.0" prefWidth="375.0" style="-fx-background-color: #ffc996; -fx-border-color: f2dac3; -fx-border-width: 5;" AnchorPane.bottomAnchor="110.0" AnchorPane.leftAnchor="-5.0" AnchorPane.topAnchor="-5.0">
+         <children>
+            <Button graphicTextGap="0.0" maxHeight="30.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="375.0" style="-fx-background-color: #ff8474; -fx-background-radius: 15;" text="All Songs" textFill="WHITE">
+               <font>
+                  <Font size="22.0" />
+               </font>
+               <VBox.margin>
+                  <Insets right="10.0" top="20.0" />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="2.0" top="2.0" />
+               </padding>
+            </Button>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="34.0" prefWidth="375.0" style="-fx-background-color: #ff8474; -fx-background-radius: 10;" text="Source Folders" textFill="WHITE">
+               <VBox.margin>
+                  <Insets right="10.0" top="10.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <AnchorPane maxHeight="28.0" maxWidth="350.0" minHeight="25.0" minWidth="250.0" prefHeight="28.0" prefWidth="320.0" style="-fx-background-color: #49b3a2; -fx-background-radius: 15;">
+               <children>
+                  <Button alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="62.0" layoutY="3.0" maxHeight="25.0" minHeight="10.0" mnemonicParsing="false" prefHeight="20.0" style="-fx-background-color: #49b3a2;" text="AddFolder" textFill="WHITE">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Button>
+                  <Button alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="128.0" layoutY="3.0" maxHeight="25.0" minHeight="10.0" mnemonicParsing="false" prefHeight="20.0" style="-fx-background-color: #49b3a2;" text="RemoveFolder" textFill="WHITE">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Button>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets bottom="3.0" left="50.0" right="60.0" top="3.0" />
+               </VBox.margin>
+            </AnchorPane>
+            <ListView fixedCellSize="30.0" prefHeight="166.0" prefWidth="370.0" style="-fx-control-inner-background: #ffc996; -fx-background-color: #ffc996;">
+               <VBox.margin>
+                  <Insets right="10.0" top="2.0" />
+               </VBox.margin></ListView>
+            <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="175.0" prefHeight="34.0" prefWidth="375.0" style="-fx-background-color: #ff8474; -fx-background-radius: 10;" text="All Playlists" textFill="WHITE">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <VBox.margin>
+                  <Insets right="10.0" top="10.0" />
+               </VBox.margin>
+            </Label>
+            <ListView fixedCellSize="30.0" prefHeight="262.0" prefWidth="375.0" style="-fx-control-inner-background: #ffc996; -fx-background-color: #ffc996;" VBox.vgrow="ALWAYS">
+               <VBox.margin>
+                  <Insets bottom="10.0" right="10.0" top="5.0" />
+               </VBox.margin></ListView>
+         </children>
+      </VBox>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="294.0" layoutY="13.0" prefHeight="40.0" prefWidth="528.0" style="-fx-background-color: #ff8474; -fx-background-radius: 15;" text="Playlist" textFill="WHITE" AnchorPane.leftAnchor="380.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0">
+         <font>
+            <Font size="28.0" />
+         </font>
+      </Label>
+      <ListView editable="true" fixedCellSize="50.0" layoutX="375.0" layoutY="91.0" prefHeight="456.0" prefWidth="540.0" style="-fx-background-color: #ffc996; -fx-border-radius: 30;" AnchorPane.bottomAnchor="128.0" AnchorPane.leftAnchor="395.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="91.0">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets></ListView>
+      <AnchorPane layoutX="375.0" layoutY="57.0" maxHeight="30.0" minHeight="20.0" prefHeight="35.0" prefWidth="470.0" style="-fx-background-color: #49b3a2; -fx-background-radius: 15;" AnchorPane.leftAnchor="440.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="55.0">
+         <children>
+            <Button alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="2.0" maxHeight="30.0" minHeight="20.0" mnemonicParsing="false" prefHeight="28.0" style="-fx-background-color: #49b3a2;" text="PlayThis" textFill="WHITE" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="50.0" />
+            <Button alignment="CENTER" contentDisplay="CENTER" layoutX="113.0" maxHeight="30.0" minHeight="20.0" mnemonicParsing="false" prefHeight="28.0" style="-fx-background-color: #49b3a2;" text="RenameThis" textFill="WHITE" AnchorPane.bottomAnchor="2.3999999999999986" AnchorPane.leftAnchor="113.0" />
+            <Button alignment="CENTER" contentDisplay="CENTER" layoutX="207.0" layoutY="1.0" maxHeight="30.0" minHeight="20.0" mnemonicParsing="false" prefHeight="28.0" style="-fx-background-color: #49b3a2;" text="AddSongs" textFill="WHITE" AnchorPane.bottomAnchor="1.3999999999999986" AnchorPane.rightAnchor="154.8" />
+            <Button alignment="CENTER" contentDisplay="CENTER" layoutX="452.0" maxHeight="30.0" minHeight="20.0" mnemonicParsing="false" prefHeight="28.0" style="-fx-background-color: #49b3a2;" text="RemoveSongs" textFill="WHITE" AnchorPane.bottomAnchor="2.0" AnchorPane.rightAnchor="50.0" />
+         </children>
+      </AnchorPane>
+      <HBox layoutX="-3.0" layoutY="575.0" prefHeight="120.0" prefWidth="945.0" style="-fx-background-color: #3d8278;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <ImageView fitHeight="98.0" fitWidth="105.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+               </HBox.margin>
+            </ImageView>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

@@ -9,6 +9,7 @@ import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import static com.application.music.utility.ApplicationConstant.*;
@@ -18,19 +19,19 @@ public class JavafxSong implements Song {
     private String songName;
     private Media media;
     private MediaPlayer mp;
-    private SongObserver serviceObserver;
+    private ArrayList<SongObserver> observerList;
     private String album;
     private String artist;
     private Object image;
 
 
-    public JavafxSong(String path, SongObserver observer){
+    public JavafxSong(String path, ArrayList<SongObserver> observer){
         File songFile = new File(path);
         media = new Media(songFile.toURI().toString());
         mp = new MediaPlayer(media);
         System.out.println(mp.getStatus());
         setSongName(songFile.getName().substring(0,songFile.getName().length()-4));
-        serviceObserver = observer;
+        observerList = observer;
     }
 
     private void setSongName(String songName) {
@@ -144,6 +145,6 @@ public class JavafxSong implements Song {
 
 
     public void notifyObservers(String status,Object value) throws IOException {
-        serviceObserver.updateSongStatus(status,value);
+        observerList.forEach(i -> i.updateSongStatus(status,value));
     }
 }

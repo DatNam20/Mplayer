@@ -14,14 +14,12 @@ public class GlobalPlaylist implements Playlist {
 
     private String playlistName;
     private ArrayList<String> songList;
-    private Set<String> songSet;
     private int currentSongId;
     private int repeat;
     private boolean shuffle;
 
     public GlobalPlaylist() {
         songList = new ArrayList<>();
-        songSet = new HashSet<>();
         playlistName = DEFAULT_PLAYLIST_NAME;
         currentSongId = 0;
         //addSongs(FileUtil.loadSong(DEFAULT_PLAYLIST_LOCATION));
@@ -61,8 +59,7 @@ public class GlobalPlaylist implements Playlist {
     public void createSongList(String location) {
         File directory = new File(location);
         setSongList(Arrays.stream(directory.list()).filter(str -> str.endsWith(".mp3")).map(str -> (location + "//" + str)).collect(Collectors.toList()));
-
-
+        
         //        File[] fileList = directory.listFiles( new FilenameFilter() {
 //            @Override
 //            public boolean accept(File dir, String name) {
@@ -71,13 +68,14 @@ public class GlobalPlaylist implements Playlist {
 //        });
     }
 
-    public void setPlaylistName(String name) {
-        playlistName = name;
-    }
-
     @Override
     public String getPlaylistName() {
         return playlistName;
+    }
+
+    @Override
+    public void setPlaylistName(String newName) {
+
     }
 
     @Override
@@ -125,15 +123,8 @@ public class GlobalPlaylist implements Playlist {
 
     @Override
     public void addSongs(List<String> list) {
-        for ( String str : list )
-        {
-            if ( !songSet.contains(str) ) {
-                songSet.add(str) ;
-                songList.add(str) ;
-            }
-
-        }
-
+        songList.removeAll(list);
+        songList.addAll(list);
     }
 
     @Override

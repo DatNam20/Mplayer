@@ -1,22 +1,29 @@
 package com.application.music.controller;
 
+import com.application.music.Main;
+import com.application.music.dao.SongDao;
 import com.application.music.dto.BasicSongDto;
 import com.application.music.dto.PlaylistDto;
 import com.application.music.observer.SongObserver;
 import com.application.music.service.MusicService;
 import com.application.music.utility.TimeUtil;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Slider;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
@@ -24,12 +31,14 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static com.application.music.utility.ApplicationConstant.*;
 
-public class Controller{
+public class Controller implements SongObserver{
     Logger logger = Logger.getLogger(Controller.class.getName());
 
     @FXML
@@ -51,21 +60,23 @@ public class Controller{
     private Label playlistLabel, songNameLabel, duration, artistLabel, albumLabel;
 
     @FXML
-    private ListView<String> playlistView;
+    private ListView<String> playlistView, allFoldersList, allPlaylists;
 
     private MusicService mser;
 
     public Controller(){
-         mser = new MusicService(this);
+         mser = MusicService.getMusicService(this);
     }
 
     @FXML
     public void initialize() throws IOException {
         refreshPlaylist(mser.getPlaylistDto());
+        refreshFoldersList(mser.getSongDao());
         updateSongDetails(mser.getSongDto());
         slider.setOnMouseClicked(mouseEvent -> {
             mser.seek(slider.getValue());
         });
+
     }
 
 
@@ -176,14 +187,15 @@ public class Controller{
         DirectoryChooser directoryChooser = new DirectoryChooser();
         File file = directoryChooser.showDialog(stage);
         if(file.exists()) {
-            mser.openDirectory(file);
+            mser.addDirectory(file);
+            refreshFoldersList(mser.getSongDao()); ;
+//            mser.openDirectory(file);
             refreshPlaylist(mser.getPlaylistDto());
-        }else{
+        }
+        else {
             playlistLabel.setText("Cant Open this folder");
             throw new RuntimeException("Cant open folder" + file.getAbsolutePath());
         }
-
-
 
     }
 
@@ -212,42 +224,141 @@ public class Controller{
         playlistView.setItems(items);
     }
 
-    private void addPlaylist(){
+    @FXML protected void addPlaylist(){
+        TextInputDialog nameDialog = new TextInputDialog("NewPlaylist");
+
+        nameDialog.setTitle("Create New Playlist");
+        nameDialog.setHeaderText("Enter Name ");
+
+        nameDialog.showAndWait() ;
+        String playlistName = nameDialog.getEditor().getText() ;
+        mser.createPlaylist(playlistName);
+        refreshPlaylistList(mser.getSongDao());
+    }
+
+    @FXML protected void renamePlaylist(){
+//      method to get current name
+//        String oldName = allPlaylists.getSelectionModel().getSelectedItem();
+        logger.info("Rename Playlist called") ;
+        TextInputDialog dialog = new TextInputDialog(playlistLabel.getText());
+        dialog.setTitle("Rename Playlist");
+        dialog.setHeaderText("Enter New Name ");
+        dialog.showAndWait() ;
+        String newName = dialog.getEditor().getText() ;
+        mser.renamePlaylist(newName);
+        refreshPlaylist(mser.getPlaylistDto());
+        refreshPlaylistList(mser.getSongDao());
+    }
+
+    @FXML protected void removePlaylist(){
+//      dialog box to confirm deletion
+
+        mser.deletePlaylist(allPlaylists.getSelectionModel().getSelectedItem());
+        refreshPlaylistList(mser.getSongDao());
+        refreshPlaylist(mser.getPlaylistDto());
+    }
+
+    @FXML protected void addToPlaylist() throws IOException {
+
+//        get list of songs
+
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getClassLoader().getResource("SongList.fxml"));
+        Parent songList = fxmlLoader.load();
+        Scene scene = new Scene(songList, 500, 550);
+        Stage newWindow = new Stage();
+        newWindow.setTitle("Add Songs To Playlist");
+        newWindow.setScene(scene);
+
+        //this is used to create composistion between child ui component and from here we will set the static fields
+        SongListController c = fxmlLoader.getController();
+        c.setDisplaySongList(mser.getAllSongs());
+
+        newWindow.showAndWait();
+
+        mser.addToPlaylist(mser.getPlaylistDto().getPlaylistName(), c.getSelectedSongList());
+        refreshPlaylist(mser.getPlaylistDto());
 
     }
 
-    private void renamePlaylist(){
+
+
+    @FXML protected void removeFromPlaylist() throws IOException {
+
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getClassLoader().getResource("SongList.fxml"));
+        Parent songList = fxmlLoader.load();
+        Scene scene = new Scene(songList, 500, 550);
+        Stage newWindow = new Stage();
+        newWindow.setTitle("Add Songs To Playlist");
+        newWindow.setScene(scene);
+
+        //this is used to create composistion between child ui component and from here we will set the static fields
+        SongListController c = fxmlLoader.getController();
+        c.setDisplaySongList(mser.getPlaylistDto().getPlaylistSong());
+
+        newWindow.showAndWait();
+
+        mser.removeFromPlaylist(mser.getPlaylistDto().getPlaylistName(), c.getSelectedSongList());
+        refreshPlaylist(mser.getPlaylistDto());
+    }
+
+    @FXML protected void setPlaylist(){
+        allPlaylists.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent click) {
+
+                if (click.getClickCount() == 2) {
+                    logger.info("Load Playlist : " + allPlaylists.getSelectionModel().getSelectedItem());
+                    mser.setCurrentPlaylist(allPlaylists.getSelectionModel().getSelectedItem());
+                    logger.info("Playlist name : " + mser.getPlaylistDto().getPlaylistName());
+                    logger.info("Songs list : " + mser.getPlaylistDto().getPlaylistSong());
+                    refreshPlaylist(mser.getPlaylistDto());
+                }
+            }
+        });
+    }
+
+    @FXML protected void addFolder(){
 
     }
 
-    private void removePlaylist(){
+    @FXML protected void removeFolder(){
+//      dialog box to confirm deletion
+
+        mser.removeDirectory(allFoldersList.getSelectionModel().getSelectedItem());
+        refreshFoldersList(mser.getSongDao());
+        refreshPlaylist(mser.getPlaylistDto());
+    }
+
+    private void refreshFoldersList(SongDao songDao) {
+        allFoldersList.setItems(FXCollections.observableArrayList(songDao.getAllSourceFolder()));
+    }
+
+    private void refreshPlaylistList(SongDao songDao) {
+        allPlaylists.setItems(FXCollections.observableArrayList(songDao.getAllPlaylist()));
+    }
+
+    @FXML protected void loadPlaylist(){
 
     }
 
-    private void addToPlaylist(){
+    @FXML protected void refreshSong(){
 
     }
 
-    private void removeFromPlaylist(){
+    @FXML protected void loadGlobalPlaylist(ActionEvent event){
 
+        mser.loadGlobalPlaylist();
+        refreshPlaylist(mser.getPlaylistDto());
     }
 
-    private void loadPlaylist(){
+    @Override
+    public void updateSongStatus(String status, Object value) {
 
+        if(status.equals(SONG_READY)){
+            updateSongDetails(mser.getSongDto());
+        }
     }
-
-
-    private void refreshSong(){
-
-    }
-
-    private void addFolder(){
-
-    }
-
-    private void removeFolder(){
-
-    }
-
-
 }

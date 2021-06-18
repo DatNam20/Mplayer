@@ -1,10 +1,13 @@
 package com.application.music.service;
 
 import com.application.music.controller.Controller;
+import com.application.music.dao.SongDao;
+import com.application.music.dao.impl.SongDaoMockImpl;
 import com.application.music.dto.BasicSongDto;
 import com.application.music.dto.PlaylistDto;
 import com.application.music.model.Playlist;
 import com.application.music.model.Song;
+import com.application.music.model.impl.CustomPlaylist;
 import com.application.music.model.impl.GlobalPlaylist;
 import com.application.music.model.impl.JavafxSong;
 import com.application.music.observer.SongObserver;
@@ -14,10 +17,8 @@ import org.apache.commons.lang3.StringUtils;
 
 
 import java.io.File;
-import java.time.Duration;
-import java.util.List;
+import java.util.*;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static com.application.music.utility.ApplicationConstant.*;
@@ -25,27 +26,43 @@ import static com.application.music.utility.ApplicationConstant.*;
 
 public class MusicService implements SongObserver {
 
-    private Playlist plist;
+    private Playlist currentPlaylist,globalPlaylist;
+    private Set<String> customPlaylists;
     private Song currentSong;
-    Controller controller;
+    private ArrayList<SongObserver> songObserver;
+    private SongDao songDao;
+
+    private static MusicService mser;
 
     Logger logger = Logger.getLogger(MusicService.class.getName());
 
-    public MusicService(Controller controller){
+    public static MusicService getMusicService(SongObserver controller){
+        if(mser==null)
+            mser = new MusicService(controller);
+        return mser;
+    }
+
+    private MusicService(SongObserver controller){
         logger.info( "Creating Music Service");
-        plist = new GlobalPlaylist();
-        if(null != plist.getCurrentSongPath())
-            currentSong = new JavafxSong(plist.getCurrentSongPath(), this);
-        this.controller = controller;
+        songDao = new SongDaoMockImpl() ;
+        globalPlaylist = new GlobalPlaylist();
+        globalPlaylist.setSongList(new ArrayList<>(songDao.getAllSongs())) ;
+        currentPlaylist = globalPlaylist;
+        customPlaylists = songDao.getAllPlaylist();
+        songObserver = new ArrayList<>();
+        this.songObserver.add(controller);
+        this.songObserver.add(this);
+        if(null != currentPlaylist.getCurrentSongPath())
+            currentSong = new JavafxSong(currentPlaylist.getCurrentSongPath(), songObserver);
         logger.info( "Music Service created with default playlist and song");
     }
 
     private boolean checkSong( ) {
         if ( currentSong == null ) {
-            if ( plist == null || plist.getSongList().size() == 0 )
+            if ( currentPlaylist == null || currentPlaylist.getSongList().size() == 0 )
                 return false ;
             else {
-                currentSong = new JavafxSong(plist.getCurrentSongPath(), this);
+                currentSong = new JavafxSong(currentPlaylist.getCurrentSongPath(), songObserver);
                 return true;
             }
         }
@@ -70,20 +87,20 @@ public class MusicService implements SongObserver {
         return false ;
     }
 
-/*    public boolean stopCurrentSong() {
+    public boolean stopCurrentSong() {
         if (checkSong() == true ) {
             currentSong.stop();
             return true;
         }
         return false ;
     }
-*/
+
     public boolean nextSong() {
         logger.info( "playNextSong called");
         if (checkSong() == true ) {
             currentSong.stop();
-            plist.nextSong();
-            currentSong = new JavafxSong(plist.getCurrentSongPath(),this);
+            currentPlaylist.nextSong();
+            currentSong = new JavafxSong(currentPlaylist.getCurrentSongPath(),songObserver);
             logger.info( "Next Song : " + currentSong.getSongName());
             return true;
         }
@@ -94,8 +111,8 @@ public class MusicService implements SongObserver {
         logger.info( "playPrevSong called");
         if (checkSong() == true ) {
             currentSong.stop();
-            plist.prevSong();
-            currentSong = new JavafxSong(plist.getCurrentSongPath(),this);
+            currentPlaylist.prevSong();
+            currentSong = new JavafxSong(currentPlaylist.getCurrentSongPath(),songObserver);
             logger.info( "Previous Song : " + currentSong.getSongName());
             return true;
         }
@@ -109,8 +126,6 @@ public class MusicService implements SongObserver {
         if(status.equals(SONG_END)){
             this.nextSong();
             this.playCurrentSong();
-        } else if(status.equals(SONG_READY)){
-            controller.updateSongDetails(getSongDto());
         }
     }
 
@@ -123,6 +138,7 @@ public class MusicService implements SongObserver {
             songDto.setAlbum(StringUtils.defaultIfEmpty(currentSong.getAlbum(), "Album-NA"));
             songDto.setArtist(StringUtils.defaultIfEmpty(currentSong.getArtist(), "Artist-NA"));
             songDto.setImage((currentSong.getImage()==null)?new Image(getClass().getResource(IMAGE_FILE_PATH).toString()):currentSong.getImage());
+            songDto.setSongElapsedTime(currentSong.getCurrentTime());
         }
         else {
             songDto.setSongName(" ");
@@ -130,6 +146,7 @@ public class MusicService implements SongObserver {
             songDto.setAlbum(" ");
             songDto.setArtist(" ");
             songDto.setImage(new Image(getClass().getResource(IMAGE_FILE_PATH).toString()));
+            songDto.setSongElapsedTime(0.0);
         }
         return songDto;
     }
@@ -154,14 +171,14 @@ public class MusicService implements SongObserver {
 
     public PlaylistDto getPlaylistDto() {
         PlaylistDto playlistDto = new PlaylistDto();
-        playlistDto.setPlaylistName(plist.getPlaylistName());
-        playlistDto.setPlaylistSong(plist.getSongList());
+        playlistDto.setPlaylistName(currentPlaylist.getPlaylistName());
+        playlistDto.setPlaylistSong(currentPlaylist.getSongList());
         return playlistDto;
     }
 
     public int updateRepeat(){
-        plist.setRepeat((plist.getRepeat() + 1)%TOTAL_REPEAT_OPTIONS);
-        return plist.getRepeat();
+        currentPlaylist.setRepeat((currentPlaylist.getRepeat() + 1)%TOTAL_REPEAT_OPTIONS);
+        return currentPlaylist.getRepeat();
     }
 
     /**
@@ -169,59 +186,90 @@ public class MusicService implements SongObserver {
      * @return : boolean - the current shuffle status
      */
     public boolean updateShuffle(){
-        plist.setShuffle(!plist.getShuffle());
-        return plist.getShuffle();
+        currentPlaylist.setShuffle(!currentPlaylist.getShuffle());
+        return currentPlaylist.getShuffle();
     }
 
+
+    public void setCurrentPlaylist(String selectedPlaylist){
+        List<String> songList = new ArrayList<>(songDao.getAllSongsFromPlaylist(selectedPlaylist));
+        currentPlaylist = new CustomPlaylist( selectedPlaylist, songList );
+        logger.info("Selected Playlist : "+ currentPlaylist.getPlaylistName());
+    }
 
     public void createPlaylist(String playlistName){
-
+        songDao.addPlaylist(playlistName) ;
     }
 
-    public void deletePlaylist(Integer playlistId){
-
+    public void deletePlaylist(String playlistName){
+        songDao.deletePlaylist(playlistName) ;
     }
 
-    public void renamePlaylist(Integer playlistId){
-
+    public void renamePlaylist(String playlistName){
+        boolean check = songDao.renamePlaylist(currentPlaylist.getPlaylistName(), playlistName) ;
+        if (check==true)
+            currentPlaylist.setPlaylistName(playlistName);
     }
 
-    public void addToPlaylist(List<Integer> songId, Integer playlistId){
+    public void addToPlaylist(String toPlaylist, List<String> songList){
 
+        songDao.addSongsToPlaylist( songList, toPlaylist ) ;
+        currentPlaylist.setSongList(new ArrayList<>(songDao.getAllSongsFromPlaylist(toPlaylist)));
     }
 
-    public void removeFromPlaylist(List<Integer> songId, Integer playlistId){
-
+    public void removeFromPlaylist(String playlistName, List<String> songList){
+//      parameter - List<String> songlist
+        songDao.deleteSongsFromPlaylist(songList, playlistName) ;
+        currentPlaylist.setSongList(new ArrayList<>(songDao.getAllSongsFromPlaylist(playlistName)));
     }
 
 
     public void addDirectory(File file){
-
+        songDao.addSourceFolder(file.getName(), file.getAbsolutePath());
+        ArrayList<String> newSongs = new ArrayList<>(songDao.getAllSongs()) ;
+        newSongs.addAll(getAllFiles(file));
+        songDao.updateAllSongs(newSongs);
+        globalPlaylist.addSongs(newSongs);
     }
 
-    public void removeDirectory(Integer pathId){
-
+    public void removeDirectory(String folderName){
+        String filepath = songDao.removeSourceFolder(folderName);
+        ArrayList<String> newSongs = new ArrayList<>(songDao.getAllSongs()) ;
+        newSongs.removeAll(getAllFiles(new File(filepath)));
+        songDao.updateAllSongs(newSongs);
+        globalPlaylist.addSongs(newSongs);
     }
 
-    public void refreshAllSongs(){
-
-    }
-
-    public String openDirectory(File file){
+    public List<String> getAllFiles(File file){
         logger.info( "Opening Directory : " + file.getAbsolutePath());
 
         File[] contentList = file.listFiles() ;
+        ArrayList<String> songs = new ArrayList<>() ;
         if (contentList != null && contentList.length > 0) {
             for(int i=0; i< contentList.length; i++) {
                 if (contentList[i].isDirectory())
-                    openDirectory(contentList[i]);
+                    songs.addAll(getAllFiles(contentList[i]));
             }
-
+            songs.addAll(FileUtil.loadSong(file.getAbsolutePath()))  ;
         }
-        plist.addSongs(FileUtil.loadSong(file.getAbsolutePath()));
 
-        return file.getAbsolutePath()==null?"Cant Open":file.getAbsolutePath();
+        return songs ;
+    }
+
+    public SongDao getSongDao() {
+        return songDao;
     }
 
 
+    public void loadGlobalPlaylist() {
+        globalPlaylist = new GlobalPlaylist();
+        globalPlaylist.setSongList(new ArrayList<>(songDao.getAllSongs())) ;
+        currentPlaylist = globalPlaylist;
+        if(null != currentPlaylist.getCurrentSongPath())
+            currentSong = new JavafxSong(currentPlaylist.getCurrentSongPath(), songObserver);
+    }
+
+    public List<String> getAllSongs(){
+        return new ArrayList<>(songDao.getAllSongs());
+    }
 }

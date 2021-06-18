@@ -7,7 +7,9 @@ import java.util.List;
 public interface Playlist
 {
     public String getPlaylistName();
+    public void setPlaylistName(String newName);
     public List<String> getSongList();
+    public void setSongList(List<String> songList);
     public String getCurrentSongPath();
     public void nextSong();
     public void prevSong();
