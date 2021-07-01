@@ -19,6 +19,6 @@ public class ApplicationConstant {
     public static final boolean SHUFFLE_ON = true;
     public static final boolean SHUFFLE_OFF = false;
 
-    public static final String IMAGE_FILE_PATH = "/image/DefaultImage.png";
+    public static final String IMAGE_FILE_PATH = "/image/Default_Song_Image.png";
 
 }

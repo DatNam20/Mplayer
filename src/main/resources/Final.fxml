@@ -4,101 +4,250 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="675.0" prefWidth="945.0" style="-fx-background-color: #ffc996;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Final">
+<AnchorPane fx:id="rootPaneId" minHeight="670.0" minWidth="925.0" prefHeight="675.0" prefWidth="875.0" style="-fx-background-color: #393E46; -fx-change-inner-background-color: #393E46;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.application.music.controller.Controller">
    <children>
-      <VBox prefHeight="570.0" prefWidth="375.0" style="-fx-background-color: #ffc996; -fx-border-color: f2dac3; -fx-border-width: 5;" AnchorPane.bottomAnchor="110.0" AnchorPane.leftAnchor="-5.0" AnchorPane.topAnchor="-5.0">
+      <VBox layoutY="1.0" prefHeight="547.0" prefWidth="370.0" style="-fx-background-color: #393E46; -fx-border-color: #393e46;" AnchorPane.bottomAnchor="127.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Button graphicTextGap="0.0" maxHeight="30.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="375.0" style="-fx-background-color: #ff8474; -fx-background-radius: 15;" text="All Songs" textFill="WHITE">
-               <font>
-                  <Font size="22.0" />
-               </font>
-               <VBox.margin>
-                  <Insets right="10.0" top="20.0" />
-               </VBox.margin>
-               <padding>
-                  <Insets bottom="2.0" top="2.0" />
-               </padding>
-            </Button>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="34.0" prefWidth="375.0" style="-fx-background-color: #ff8474; -fx-background-radius: 10;" text="Source Folders" textFill="WHITE">
-               <VBox.margin>
-                  <Insets right="10.0" top="10.0" />
-               </VBox.margin>
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
-            <AnchorPane maxHeight="28.0" maxWidth="350.0" minHeight="25.0" minWidth="250.0" prefHeight="28.0" prefWidth="320.0" style="-fx-background-color: #49b3a2; -fx-background-radius: 15;">
+            <AnchorPane maxHeight="151.0" maxWidth="376.0" minHeight="25.0" minWidth="150.0" prefHeight="64.0" prefWidth="246.0" style="-fx-background-color: #393E46;">
                <children>
-                  <Button alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="62.0" layoutY="3.0" maxHeight="25.0" minHeight="10.0" mnemonicParsing="false" prefHeight="20.0" style="-fx-background-color: #49b3a2;" text="AddFolder" textFill="WHITE">
+                  <Separator prefWidth="200.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="58.0" />
+                  <Button alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="277.0" layoutY="14.0" maxHeight="40.0" maxWidth="40.0" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#openFolder" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #393E46;" textFill="WHITE" AnchorPane.bottomAnchor="12.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="12.0">
                      <font>
                         <Font size="11.0" />
                      </font>
+                     <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@image/Add_Folder_Icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
                   </Button>
-                  <Button alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="128.0" layoutY="3.0" maxHeight="25.0" minHeight="10.0" mnemonicParsing="false" prefHeight="20.0" style="-fx-background-color: #49b3a2;" text="RemoveFolder" textFill="WHITE">
+                  <Button alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="323.0" layoutY="14.0" maxHeight="40.0" maxWidth="40.0" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#removeFolder" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #393E46;" textFill="WHITE" AnchorPane.bottomAnchor="12.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="12.0">
                      <font>
                         <Font size="11.0" />
                      </font>
+                     <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@image/Remove_Folder_Icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
                   </Button>
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="45.0" layoutY="16.0" minHeight="36.0" prefHeight="36.0" prefWidth="180.0" style="-fx-background-color: #393E46;" text="Source Folders" textFill="#eeeeee" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="8.0">
+                     <font>
+                        <Font name="Century Gothic" size="24.0" />
+                     </font>
+                  </Label>
                </children>
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
-               <padding>
-                  <Insets top="10.0" />
-               </padding>
                <VBox.margin>
-                  <Insets bottom="3.0" left="50.0" right="60.0" top="3.0" />
+                  <Insets bottom="3.0" left="5.0" />
                </VBox.margin>
             </AnchorPane>
-            <ListView fixedCellSize="30.0" prefHeight="166.0" prefWidth="370.0" style="-fx-control-inner-background: #ffc996; -fx-background-color: #ffc996;">
+            <ListView fx:id="allFoldersList" fixedCellSize="40.0" prefHeight="163.0" prefWidth="374.0" style="-fx-background-color: #393e46; -fx-control-inner-background: #393e46;">
                <VBox.margin>
-                  <Insets right="10.0" top="2.0" />
+                  <Insets top="5.0" />
                </VBox.margin></ListView>
-            <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="175.0" prefHeight="34.0" prefWidth="375.0" style="-fx-background-color: #ff8474; -fx-background-radius: 10;" text="All Playlists" textFill="WHITE">
+            <AnchorPane maxHeight="59.0" maxWidth="376.0" minHeight="25.0" minWidth="150.0" prefHeight="69.0" prefWidth="374.0" style="-fx-background-color: #393E46;">
+               <children>
+                  <Separator layoutX="52.0" prefHeight="3.0" prefWidth="258.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutY="5.0" minHeight="50.0" minWidth="145.0" prefHeight="54.0" prefWidth="145.0" style="-fx-background-color: #393E46;" text="All Playlists" textFill="#eeeeee" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="5.0">
+                     <font>
+                        <Font name="Century Gothic" size="24.0" />
+                     </font>
+                  </Label>
+                  <Button layoutX="276.0" layoutY="14.0" maxHeight="40.0" maxWidth="40.0" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#addPlaylist" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #393E46;" AnchorPane.bottomAnchor="13.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="15.0">
+                     <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@image/Add_List_Icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button layoutX="322.0" layoutY="14.0" maxHeight="40.0" maxWidth="40.0" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#removePlaylist" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #393E46;" AnchorPane.bottomAnchor="13.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+                     <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@image/Remove_List_Icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </AnchorPane>
+            <Separator prefHeight="3.0" prefWidth="258.0">
+               <VBox.margin>
+                  <Insets left="10.0" right="5.0" />
+               </VBox.margin>
+            </Separator>
+            <Button alignment="BOTTOM_LEFT" graphicTextGap="0.0" maxHeight="50.0" minHeight="29.0" mnemonicParsing="false" onAction="#loadGlobalPlaylist" prefHeight="29.0" prefWidth="374.0" style="-fx-background-color: #393e46;" text="All Songs" textFill="#eeeeee">
                <font>
-                  <Font size="20.0" />
+                  <Font name="Century Gothic" size="18.0" />
                </font>
                <VBox.margin>
-                  <Insets right="10.0" top="10.0" />
+                  <Insets top="5.0" />
                </VBox.margin>
-            </Label>
-            <ListView fixedCellSize="30.0" prefHeight="262.0" prefWidth="375.0" style="-fx-control-inner-background: #ffc996; -fx-background-color: #ffc996;" VBox.vgrow="ALWAYS">
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </Button>
+            <ListView fx:id="allPlaylists" fixedCellSize="40.0" onMouseClicked="#setPlaylist" prefHeight="234.0" prefWidth="374.0" style="-fx-background-color: #393e46; -fx-control-inner-background: #393e46;" VBox.vgrow="ALWAYS">
                <VBox.margin>
-                  <Insets bottom="10.0" right="10.0" top="5.0" />
+                  <Insets />
                </VBox.margin></ListView>
          </children>
       </VBox>
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="294.0" layoutY="13.0" prefHeight="40.0" prefWidth="528.0" style="-fx-background-color: #ff8474; -fx-background-radius: 15;" text="Playlist" textFill="WHITE" AnchorPane.leftAnchor="380.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0">
-         <font>
-            <Font size="28.0" />
-         </font>
-      </Label>
-      <ListView editable="true" fixedCellSize="50.0" layoutX="375.0" layoutY="91.0" prefHeight="456.0" prefWidth="540.0" style="-fx-background-color: #ffc996; -fx-border-radius: 30;" AnchorPane.bottomAnchor="128.0" AnchorPane.leftAnchor="395.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="91.0">
+      <ListView fx:id="playlistView" editable="true" fixedCellSize="50.0" layoutX="394.0" layoutY="67.0" prefHeight="482.0" prefWidth="609.0" style="-fx-background-color: #393e46; -fx-control-inner-background: #393e46;" AnchorPane.bottomAnchor="126.0" AnchorPane.leftAnchor="394.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="67.0">
          <opaqueInsets>
             <Insets />
          </opaqueInsets></ListView>
-      <AnchorPane layoutX="375.0" layoutY="57.0" maxHeight="30.0" minHeight="20.0" prefHeight="35.0" prefWidth="470.0" style="-fx-background-color: #49b3a2; -fx-background-radius: 15;" AnchorPane.leftAnchor="440.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="55.0">
+      <AnchorPane layoutX="370.0" maxHeight="53.0" minHeight="20.0" prefHeight="53.0" prefWidth="575.0" style="-fx-background-color: #393E46;" AnchorPane.leftAnchor="372.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Button alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="2.0" maxHeight="30.0" minHeight="20.0" mnemonicParsing="false" prefHeight="28.0" style="-fx-background-color: #49b3a2;" text="PlayThis" textFill="WHITE" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="50.0" />
-            <Button alignment="CENTER" contentDisplay="CENTER" layoutX="113.0" maxHeight="30.0" minHeight="20.0" mnemonicParsing="false" prefHeight="28.0" style="-fx-background-color: #49b3a2;" text="RenameThis" textFill="WHITE" AnchorPane.bottomAnchor="2.3999999999999986" AnchorPane.leftAnchor="113.0" />
-            <Button alignment="CENTER" contentDisplay="CENTER" layoutX="207.0" layoutY="1.0" maxHeight="30.0" minHeight="20.0" mnemonicParsing="false" prefHeight="28.0" style="-fx-background-color: #49b3a2;" text="AddSongs" textFill="WHITE" AnchorPane.bottomAnchor="1.3999999999999986" AnchorPane.rightAnchor="154.8" />
-            <Button alignment="CENTER" contentDisplay="CENTER" layoutX="452.0" maxHeight="30.0" minHeight="20.0" mnemonicParsing="false" prefHeight="28.0" style="-fx-background-color: #49b3a2;" text="RemoveSongs" textFill="WHITE" AnchorPane.bottomAnchor="2.0" AnchorPane.rightAnchor="50.0" />
+            <Button alignment="CENTER" contentDisplay="CENTER" layoutX="476.0" layoutY="12.0" maxHeight="40.0" maxWidth="40.0" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#renamePlaylist" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #393E46;" textFill="WHITE" AnchorPane.rightAnchor="110.0" AnchorPane.topAnchor="12.0">
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@image/Edit_Name_Icon.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <Button alignment="CENTER" contentDisplay="CENTER" layoutX="526.0" layoutY="12.0" maxHeight="40.0" maxWidth="40.0" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#addToPlaylist" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #393E46;" textFill="WHITE" AnchorPane.bottomAnchor="11.200000000000003" AnchorPane.rightAnchor="60.0">
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@image/Add_Music_Icon.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <Button alignment="CENTER" contentDisplay="CENTER" layoutX="580.0" layoutY="12.0" maxHeight="40.0" maxWidth="40.0" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#removeFromPlaylist" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #393E46;" textFill="WHITE" AnchorPane.bottomAnchor="13.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="12.0">
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@image/Remove_Music_Icon.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <Label fx:id="playlistLabel" contentDisplay="CENTER" prefHeight="54.0" prefWidth="457.0" style="-fx-background-color: #393E46;" text="Playlist" textFill="#eeeeee" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="176.0" AnchorPane.topAnchor="0.0">
+               <font>
+                  <Font name="Century Gothic" size="24.0" />
+               </font>
+               <padding>
+                  <Insets left="30.0" />
+               </padding>
+            </Label>
          </children>
       </AnchorPane>
-      <HBox layoutX="-3.0" layoutY="575.0" prefHeight="120.0" prefWidth="945.0" style="-fx-background-color: #3d8278;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <HBox alignment="CENTER" layoutX="463.0" layoutY="597.0" prefHeight="54.0" prefWidth="446.0" spacing="15.0" style="-fx-background-color: #393E46;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="463.0" AnchorPane.rightAnchor="94.0">
          <children>
-            <ImageView fitHeight="98.0" fitWidth="105.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
-               <HBox.margin>
-                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-               </HBox.margin>
-            </ImageView>
+            <Button layoutX="122.0" layoutY="33.0" mnemonicParsing="false" onAction="#repeat" style="-fx-background-color: #393E46;">
+               <graphic>
+                  <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@image/Repeat_Icon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#skipBack" style="-fx-background-color: #393E46;">
+               <graphic>
+                  <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@image/Skip_Back_Icon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#previous" style="-fx-background-color: #393E46;">
+               <graphic>
+                  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@image/Previous_Icon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="playpause" mnemonicParsing="false" onAction="#playpause" prefHeight="67.0" prefWidth="70.0" style="-fx-background-color: #393E46;">
+               <graphic>
+                  <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@image/Play_Icon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button layoutX="192.0" layoutY="33.0" mnemonicParsing="false" onAction="#next" style="-fx-background-color: #393E46;">
+               <graphic>
+                  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@image/Next_Icon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#skipAhead" style="-fx-background-color: #393E46;">
+               <graphic>
+                  <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@image/Skip_Ahead_Icon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button layoutX="340.0" layoutY="33.0" mnemonicParsing="false" onAction="#shuffle" style="-fx-background-color: #393E46;">
+               <graphic>
+                  <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@image/Shuffle_Icon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
          </children>
       </HBox>
+      <ImageView fx:id="songImage" fitHeight="98.0" fitWidth="112.0" layoutY="567.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" />
+      <Label fx:id="songNameLabel" layoutX="122.0" layoutY="579.0" prefHeight="19.0" prefWidth="248.0" text="Song Name" textFill="WHITE" AnchorPane.bottomAnchor="65.60000000000002" AnchorPane.leftAnchor="122.0">
+         <font>
+            <Font name="Century Gothic" size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="artistLabel" layoutX="122.0" layoutY="609.0" prefHeight="14.0" prefWidth="248.0" text="Artist" textFill="WHITE" AnchorPane.bottomAnchor="43.60000000000002" AnchorPane.leftAnchor="122.0">
+         <font>
+            <Font name="Century Gothic" size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="albumLabel" layoutX="122.0" layoutY="630.0" prefHeight="0.0" prefWidth="248.0" text="Album" textFill="WHITE" AnchorPane.bottomAnchor="22.600000000000023" AnchorPane.leftAnchor="122.0">
+         <font>
+            <Font name="Century Gothic" size="18.0" />
+         </font>
+      </Label>
+      <Slider fx:id="slider" layoutX="463.0" layoutY="579.0" prefHeight="14.0" prefWidth="388.0" AnchorPane.bottomAnchor="81.60000000000002" AnchorPane.leftAnchor="463.0" AnchorPane.rightAnchor="94.0" />
+      <Separator layoutY="559.0" prefWidth="200.0" AnchorPane.bottomAnchor="112.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+      <Separator layoutX="374.0" layoutY="52.0" prefWidth="200.0" AnchorPane.leftAnchor="400.0" AnchorPane.rightAnchor="6.0">
+         <padding>
+            <Insets top="6.0" />
+         </padding>
+      </Separator>
+      <Label fx:id="duration" layoutX="918.0" layoutY="578.0" prefHeight="18.0" prefWidth="35.0" text="00:00" textFill="WHITE" AnchorPane.bottomAnchor="79.0" AnchorPane.rightAnchor="50.0">
+         <font>
+            <Font name="Century Gothic" size="12.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
