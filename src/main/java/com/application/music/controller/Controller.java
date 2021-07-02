@@ -54,7 +54,7 @@ public class Controller implements SongObserver{
     private Slider slider;
 
     @FXML
-    private ImageView songImage;
+    private ImageView songImage, playPauseImage, repeatImage, shuffleImage;
 
     @FXML
     private Label playlistLabel, songNameLabel, duration, artistLabel, albumLabel;
@@ -63,9 +63,12 @@ public class Controller implements SongObserver{
     private ListView<String> playlistView, allFoldersList, allPlaylists;
 
     private MusicService mser;
+    private String playPauseStatus;
+
 
     public Controller(){
-         mser = MusicService.getMusicService(this);
+        playPauseStatus = UI_PLAY;
+        mser = MusicService.getMusicService(this);
     }
 
     @FXML
@@ -73,6 +76,9 @@ public class Controller implements SongObserver{
         refreshPlaylist(mser.getPlaylistDto());
         refreshFoldersList(mser.getSongDao());
         updateSongDetails(mser.getSongDto());
+        playPauseImage.setImage(new Image(getClass().getResource(PLAY_IMAGE_PATH).toString()));
+        repeatImage.setImage(new Image(getClass().getResource(REPEAT_ALL_IMAGE).toString()));
+        shuffleImage.setImage(new Image(getClass().getResource(SHUFFLE_OFF_IMAGE).toString()));
         slider.setOnMouseClicked(mouseEvent -> {
             mser.seek(slider.getValue());
         });
@@ -84,14 +90,19 @@ public class Controller implements SongObserver{
     @FXML protected void playpause(ActionEvent event) throws IOException {
         btn = (Button) event.getSource();
 
-        if(UI_PLAY.equals(playpause.getText())){
+        if(UI_PLAY.equals(playPauseStatus)){
             mser.playCurrentSong();
-            playpause.setText(UI_PAUSE);
-        }else if (UI_PAUSE.equals(playpause.getText())){
+            playPauseStatus = UI_PAUSE;
+            playPauseImage.setImage(new Image(getClass().getResource(PAUSE_IMAGE_PATH).toString()));
+        }
+        else if (UI_PAUSE.equals(playPauseStatus)){
             mser.pauseCurrentSong();
-            playpause.setText(UI_PLAY);
-        }else
+            playPauseStatus = UI_PLAY;
+            playPauseImage.setImage(new Image(getClass().getResource(PLAY_IMAGE_PATH).toString()));
+        }
+        else
             throw new RuntimeException("UNKNOWN Selection at play / pause");
+
         updateSongDetails(mser.getSongDto());
     }
 
@@ -115,7 +126,7 @@ public class Controller implements SongObserver{
 
         Runnable r = new Runnable() {
             public void run() {
-                while ( playpause.getText().equals(UI_PAUSE)) {
+                while ( UI_PAUSE.equals(playPauseStatus)) {
 
                     //System.out.println(mp.getCurrentTime().toMinutes());      // Debug
 
@@ -147,8 +158,9 @@ public class Controller implements SongObserver{
     @FXML protected void next(ActionEvent event) throws IOException {
         btn = (Button) event.getSource();
         mser.nextSong();
-        if(UI_PLAY.equals(playpause.getText())){
-            playpause.setText(UI_PAUSE);
+        if(UI_PLAY.equals(playPauseStatus)){
+            playPauseStatus = UI_PAUSE;
+            playPauseImage.setImage(new Image(getClass().getResource(PAUSE_IMAGE_PATH).toString()));
         }
         mser.playCurrentSong();
         updateSongDetails(mser.getSongDto());
@@ -174,8 +186,9 @@ public class Controller implements SongObserver{
     @FXML protected void previous(ActionEvent event) throws IOException {
         btn = (Button) event.getSource();
         mser.prevSong();
-        if(UI_PLAY.equals(playpause.getText())){
-            playpause.setText(UI_PAUSE);
+        if(UI_PLAY.equals(playPauseStatus)){
+            playPauseStatus = UI_PAUSE;
+            playPauseImage.setImage(new Image(getClass().getResource(PAUSE_IMAGE_PATH).toString()));
         }
         mser.playCurrentSong();
         updateSongDetails(mser.getSongDto());
@@ -202,17 +215,17 @@ public class Controller implements SongObserver{
     @FXML protected void repeat(ActionEvent event) {
         btn = (Button) event.getSource();
         if(mser.updateRepeat()==0)
-            btn.setText("REPT1") ;
+            repeatImage.setImage(new Image(getClass().getResource(REPEAT_ALL_IMAGE).toString()));
         else
-            btn.setText("REPT@") ;
+            repeatImage.setImage(new Image(getClass().getResource(REPEAT_ONE_IMAGE).toString()));
     }
 
     @FXML protected void shuffle(ActionEvent event) {
         btn = (Button) event.getSource();
         if(mser.updateShuffle())
-            btn.setText("SHFL0") ;
+            shuffleImage.setImage(new Image(getClass().getResource(SHUFFLE_ON_IMAGE).toString()));
         else
-            btn.setText("SHFL1") ;
+            shuffleImage.setImage(new Image(getClass().getResource(SHUFFLE_OFF_IMAGE).toString()));
     }
 
     private void refreshPlaylist(PlaylistDto playlistDto) {

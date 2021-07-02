@@ -97,12 +97,12 @@
                   <Insets left="10.0" right="5.0" />
                </VBox.margin>
             </Separator>
-            <Button alignment="BOTTOM_LEFT" graphicTextGap="0.0" maxHeight="50.0" minHeight="29.0" mnemonicParsing="false" onAction="#loadGlobalPlaylist" prefHeight="29.0" prefWidth="374.0" style="-fx-background-color: #393e46;" text="All Songs" textFill="#eeeeee">
+            <Button alignment="BOTTOM_LEFT" graphicTextGap="0.0" maxHeight="50.0" minHeight="28.0" mnemonicParsing="false" onAction="#loadGlobalPlaylist" prefHeight="29.0" prefWidth="369.0" style="-fx-background-color: #393e46;" text="All Songs" textFill="#eeeeee">
                <font>
-                  <Font name="Century Gothic" size="18.0" />
+                  <Font name="Century Gothic" size="14.0" />
                </font>
                <VBox.margin>
-                  <Insets top="5.0" />
+                  <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
                <padding>
                   <Insets left="10.0" />
@@ -154,15 +154,11 @@
             </Label>
          </children>
       </AnchorPane>
-      <HBox alignment="CENTER" layoutX="463.0" layoutY="597.0" prefHeight="54.0" prefWidth="446.0" spacing="15.0" style="-fx-background-color: #393E46;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="463.0" AnchorPane.rightAnchor="94.0">
+      <HBox alignment="CENTER" layoutX="463.0" layoutY="597.0" prefHeight="54.0" prefWidth="368.0" spacing="15.0" style="-fx-background-color: #393E46;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="463.0" AnchorPane.rightAnchor="94.0">
          <children>
             <Button layoutX="122.0" layoutY="33.0" mnemonicParsing="false" onAction="#repeat" style="-fx-background-color: #393E46;">
                <graphic>
-                  <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@image/Repeat_Icon.png" />
-                     </image>
-                  </ImageView>
+                  <ImageView fx:id="repeatImage" fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true" />
                </graphic>
             </Button>
             <Button mnemonicParsing="false" onAction="#skipBack" style="-fx-background-color: #393E46;">
@@ -185,11 +181,7 @@
             </Button>
             <Button fx:id="playpause" mnemonicParsing="false" onAction="#playpause" prefHeight="67.0" prefWidth="70.0" style="-fx-background-color: #393E46;">
                <graphic>
-                  <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@image/Play_Icon.png" />
-                     </image>
-                  </ImageView>
+                  <ImageView fx:id="playPauseImage" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" />
                </graphic>
             </Button>
             <Button layoutX="192.0" layoutY="33.0" mnemonicParsing="false" onAction="#next" style="-fx-background-color: #393E46;">
@@ -212,11 +204,7 @@
             </Button>
             <Button layoutX="340.0" layoutY="33.0" mnemonicParsing="false" onAction="#shuffle" style="-fx-background-color: #393E46;">
                <graphic>
-                  <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@image/Shuffle_Icon.png" />
-                     </image>
-                  </ImageView>
+                  <ImageView fx:id="shuffleImage" fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true" />
                </graphic>
             </Button>
          </children>
@@ -229,22 +217,22 @@
       </Label>
       <Label fx:id="artistLabel" layoutX="122.0" layoutY="609.0" prefHeight="14.0" prefWidth="248.0" text="Artist" textFill="WHITE" AnchorPane.bottomAnchor="43.60000000000002" AnchorPane.leftAnchor="122.0">
          <font>
-            <Font name="Century Gothic" size="18.0" />
+            <Font name="Century Gothic" size="16.0" />
          </font>
       </Label>
       <Label fx:id="albumLabel" layoutX="122.0" layoutY="630.0" prefHeight="0.0" prefWidth="248.0" text="Album" textFill="WHITE" AnchorPane.bottomAnchor="22.600000000000023" AnchorPane.leftAnchor="122.0">
          <font>
-            <Font name="Century Gothic" size="18.0" />
+            <Font name="Century Gothic" size="16.0" />
          </font>
       </Label>
-      <Slider fx:id="slider" layoutX="463.0" layoutY="579.0" prefHeight="14.0" prefWidth="388.0" AnchorPane.bottomAnchor="81.60000000000002" AnchorPane.leftAnchor="463.0" AnchorPane.rightAnchor="94.0" />
+      <Slider fx:id="slider" layoutX="463.0" layoutY="579.0" prefHeight="14.0" prefWidth="388.0" AnchorPane.bottomAnchor="81.60000000000002" AnchorPane.leftAnchor="440.0" AnchorPane.rightAnchor="120.0" />
       <Separator layoutY="559.0" prefWidth="200.0" AnchorPane.bottomAnchor="112.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
       <Separator layoutX="374.0" layoutY="52.0" prefWidth="200.0" AnchorPane.leftAnchor="400.0" AnchorPane.rightAnchor="6.0">
          <padding>
             <Insets top="6.0" />
          </padding>
       </Separator>
-      <Label fx:id="duration" layoutX="918.0" layoutY="578.0" prefHeight="18.0" prefWidth="35.0" text="00:00" textFill="WHITE" AnchorPane.bottomAnchor="79.0" AnchorPane.rightAnchor="50.0">
+      <Label fx:id="duration" layoutX="918.0" layoutY="578.0" prefHeight="18.0" prefWidth="30.0" text="00:00" textFill="WHITE" AnchorPane.bottomAnchor="79.0" AnchorPane.rightAnchor="75.0">
          <font>
             <Font name="Century Gothic" size="12.0" />
          </font>

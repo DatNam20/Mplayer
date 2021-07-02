@@ -21,4 +21,13 @@ public class ApplicationConstant {
 
     public static final String IMAGE_FILE_PATH = "/image/Default_Song_Image.png";
 
+    public static final String PLAY_IMAGE_PATH = "/image/Play_Icon.png";
+    public static final String PAUSE_IMAGE_PATH = "/image/Pause_Icon.png";
+
+    public static final String REPEAT_ALL_IMAGE = "/image/Repeat_Icon.png";
+    public static final String REPEAT_ONE_IMAGE = "/image/Repeat_One_Icon.png";
+
+    public static final String SHUFFLE_ON_IMAGE = "/image/Shuffle_Icon.png";
+    public static final String SHUFFLE_OFF_IMAGE = "/image/Shuffle_Off_Icon.png";
+
 }
