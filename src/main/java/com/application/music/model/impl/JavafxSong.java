@@ -46,7 +46,6 @@ public class JavafxSong implements Song {
     @Override
     public void stop() {
         mp.stop();
-        logger.info(mp.getStatus().toString());
     }
 
     @Override
@@ -105,7 +104,6 @@ public class JavafxSong implements Song {
     @Override
     public void pause() {
         mp.pause();
-        logger.info(mp.getStatus().toString());
     }
 
     @Override
@@ -143,8 +141,8 @@ public class JavafxSong implements Song {
         mp.seek(Duration.seconds(currentTime));
     }
 
-
     public void notifyObservers(String status,Object value) throws IOException {
         observerList.forEach(i -> i.updateSongStatus(status,value));
     }
+
 }

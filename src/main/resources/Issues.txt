@@ -1,0 +1,21 @@
+
+#1 - switching from AllSongs to NewPlaylist
+        - playPauseImage should change to Play_icon
+        - slider does not work smoothly
+        - sometimes Runtime Exception occurs due to no song in currentPlaylist
+
+#2 - switching from customPlaylist to AllSongs
+        - on clicking nextButton after switching playlist songs from previous playlist and
+          current playlist start playing together
+        - sometimes updateSlider() causes "Runtime Exception - 'this.getMedia' is null"
+
+#3 - on adding/removing Source Folder
+        (update)
+        - all songs from selected folder should be added/removed
+        - then database should be refreshed by reloading songs from all the concurrent folders
+        (issue)
+        - on removing source folder playlist did not update until playlist switched
+
+#4 - 'Cancel' for 'Add Playlist' dialog box does not work
+
+#5 - 'Selection based' feature to be added for Playlist

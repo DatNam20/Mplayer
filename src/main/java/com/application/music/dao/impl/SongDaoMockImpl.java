@@ -70,13 +70,10 @@ public class SongDaoMockImpl implements SongDao {
 
     @Override
     public boolean deleteSongsFromPlaylist(List<String> songList, String name) {
-        logger.info(name);
-        logger.info(songList.toString());
         if(playlist.containsKey(name)){
             playlist.get(name).removeAll(songList);
             return true;
         }
-        logger.info("Failed to delete");
         return false;
     }
 

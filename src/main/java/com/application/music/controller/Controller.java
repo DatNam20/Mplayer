@@ -250,9 +250,6 @@ public class Controller implements SongObserver{
     }
 
     @FXML protected void renamePlaylist(){
-//      method to get current name
-//        String oldName = allPlaylists.getSelectionModel().getSelectedItem();
-        logger.info("Rename Playlist called") ;
         TextInputDialog dialog = new TextInputDialog(playlistLabel.getText());
         dialog.setTitle("Rename Playlist");
         dialog.setHeaderText("Enter New Name ");
@@ -325,8 +322,6 @@ public class Controller implements SongObserver{
                 if (click.getClickCount() == 2) {
                     logger.info("Load Playlist : " + allPlaylists.getSelectionModel().getSelectedItem());
                     mser.setCurrentPlaylist(allPlaylists.getSelectionModel().getSelectedItem());
-                    logger.info("Playlist name : " + mser.getPlaylistDto().getPlaylistName());
-                    logger.info("Songs list : " + mser.getPlaylistDto().getPlaylistSong());
                     refreshPlaylist(mser.getPlaylistDto());
                 }
             }
@@ -369,9 +364,9 @@ public class Controller implements SongObserver{
 
     @Override
     public void updateSongStatus(String status, Object value) {
-
         if(status.equals(SONG_READY)){
             updateSongDetails(mser.getSongDto());
         }
     }
+
 }
